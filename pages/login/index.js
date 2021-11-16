@@ -3,13 +3,15 @@ import Image from 'next/image';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Input from '../../src/components/Input';
-import Button from '../../src/components/Button';
-import { login } from '../../redux/slice/auth';
+import Alert from '@mui/material/Alert';
+
+import Input from 'src/components/Input';
+import Button from 'src/components/Button';
+
+import { login } from 'redux/slice/auth';
 
 export default function Login() {
   const {
-    register,
     control,
     handleSubmit,
     formState: { errors },
@@ -17,21 +19,27 @@ export default function Login() {
 
   const dispatch = useDispatch();
 
+  const { status, errorMessage } = useSelector((state) => state.auth);
+
   const onSubmit = (data) => {
-    console.log('data ', data);
     dispatch(login(data));
   };
-  console.log('errors ', errors);
 
   return (
     <div className='grid place-items-center h-screen'>
-      <div className='w-9/12 md:w-1/2 lg:w-1/3 px-8 pt-8 pb-16 border-2 border-solid border-primary border-opacity-25 rounded-lg shadow-xl'>
+      <div className='w-9/12 md:w-1/2 lg:w-1/3 px-8 pt-12 pb-16 border-2 border-solid border-primary border-opacity-25 rounded-lg shadow-xl'>
         <Image
-          src='/assets/learnlit_logo.svg'
+          src='/assets/learnlit.svg'
           alt='learnlit'
-          width='220'
-          height='100'
+          width='200'
+          height='70'
         />
+        <h2 className='text-2xl my-1.5 ml-1'>Login</h2>
+        {errorMessage && (
+          <Alert severity='error' className='mb-2'>
+            {errorMessage}
+          </Alert>
+        )}
         <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2'>
           <Controller
             name='email'
@@ -86,6 +94,7 @@ export default function Login() {
             type='submit'
             variant='contained'
             className='mt-5'
+            loading={status === 'loading'}
           />
         </form>
       </div>

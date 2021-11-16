@@ -1,8 +1,9 @@
 import { styled } from '@mui/material/styles';
 import MuiButton from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import PropTypes from 'prop-types';
 
-const StyledButton = styled(MuiButton)(({ theme }) => ({
+const StyledButton = styled(LoadingButton)(({ theme }) => ({
   padding: '0.6rem 1.5rem',
   borderRadius: 6,
 }));

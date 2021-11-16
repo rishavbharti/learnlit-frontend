@@ -5,6 +5,7 @@ const API = process.env.NEXT_PUBLIC_API_ENDPOINT;
 
 const initialState = {
   status: 'idle',
+  profile: null,
   errorMessage: '',
   // isAuthenticated: Boolean(localStorage.getItem('accessToken')),
 };
@@ -13,9 +14,10 @@ const config = {
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 };
 
-export const signUp = createAsyncThunk('auth/signUp', async (userData) => {
+export const signup = createAsyncThunk('auth/signup', async (userData) => {
   const response = await axios.post(
     `${API}/registration-service`,
     {
@@ -27,20 +29,26 @@ export const signUp = createAsyncThunk('auth/signUp', async (userData) => {
   return response;
 });
 
-export const login = createAsyncThunk('auth/login', async (userData) => {
-  await axios
-    .post(
-      `${API}/auth/login`,
-      {
-        ...userData,
-      },
-      config
-    )
-    .then((response) => console.log('response ', response))
-    .catch((err) => console.log(err.message));
-
-  // return response;
-});
+export const login = createAsyncThunk(
+  'auth/login',
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${API}/auth/login`,
+        {
+          ...userData,
+        },
+        config
+      );
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data.errorMessage);
+    }
+  }
+);
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -54,13 +62,13 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(signUp.pending, (state) => {
+      .addCase(signup.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(signUp.fulfilled, (state, action) => {
+      .addCase(signup.fulfilled, (state, action) => {
         state.status = 'idle';
       })
-      .addCase(signUp.rejected, (state, action) => {
+      .addCase(signup.rejected, (state, action) => {
         state.status = 'failed';
       })
       .addCase(login.pending, (state) => {
@@ -69,15 +77,18 @@ export const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         const { payload } = action;
         state.status = 'idle';
+        state.profile = payload;
         // window.localStorage.setItem('accessToken', payload.data);
         state.isAuthenticated = true;
         state.errorMessage = '';
 
-        // window.location.replace("/#/dashboard/");
+        // window.location.replace('/');
       })
       .addCase(login.rejected, (state, action) => {
-        state.errorMessage = 'Error: Unable to login, details do not match';
+        const { payload } = action;
         state.status = 'failed';
+        state.isAuthenticated = false;
+        state.errorMessage = payload;
       });
   },
 });
