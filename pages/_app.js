@@ -1,10 +1,14 @@
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Provider } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 
-import { store } from '../redux/store';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+import { wrapper, store } from 'redux/store';
+import { verifyToken } from 'redux/slice/auth';
 
 import 'tailwindcss/tailwind.css';
-import '../styles/globals.css';
+import 'styles/globals.css';
 
 const theme = createTheme({
   palette: {
@@ -18,14 +22,28 @@ const theme = createTheme({
   },
 });
 
-function MyApp({ Component, pageProps }) {
+function App({ Component, pageProps }) {
+  const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    const token =
+      typeof window !== 'undefined' && window.localStorage.getItem('token');
+
+    axios.defaults.headers.common = {
+      Authorization: 'Bearer ' + token,
+    };
+
+    if (token && !isAuthenticated) {
+      dispatch(verifyToken());
+    }
+  }, [dispatch, isAuthenticated]);
+
   return (
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </Provider>
+    <ThemeProvider theme={theme}>
+      <Component {...pageProps} />
+    </ThemeProvider>
   );
 }
 
-export default MyApp;
+export default wrapper.withRedux(App);

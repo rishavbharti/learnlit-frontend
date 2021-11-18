@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -18,8 +19,17 @@ export default function Login() {
   } = useForm();
 
   const dispatch = useDispatch();
+  const router = useRouter();
 
-  const { status, errorMessage } = useSelector((state) => state.auth);
+  const { loading, isAuthenticated, errorMessage } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/');
+    }
+  }, [router, isAuthenticated]);
 
   const onSubmit = (data) => {
     dispatch(login(data));
@@ -94,7 +104,7 @@ export default function Login() {
             type='submit'
             variant='contained'
             className='mt-5'
-            loading={status === 'loading'}
+            loading={loading}
           />
         </form>
       </div>
