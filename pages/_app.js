@@ -4,8 +4,10 @@ import axios from 'axios';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import { wrapper, store } from 'redux/store';
+import { wrapper } from 'redux/store';
 import { verifyToken } from 'redux/slice/auth';
+
+import { isBrowser } from 'src/utils';
 
 import 'tailwindcss/tailwind.css';
 import 'styles/globals.css';
@@ -27,8 +29,7 @@ function App({ Component, pageProps }) {
   const { isAuthenticated } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    const token =
-      typeof window !== 'undefined' && window.localStorage.getItem('token');
+    const token = isBrowser() && window.localStorage.getItem('token');
 
     axios.defaults.headers.common = {
       Authorization: 'Bearer ' + token,

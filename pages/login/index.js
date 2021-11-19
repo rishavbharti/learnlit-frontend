@@ -9,9 +9,11 @@ import Alert from '@mui/material/Alert';
 import Input from 'src/components/Input';
 import Button from 'src/components/Button';
 
+import withoutAuth from 'src/components/HOC/withoutAuth';
+
 import { login } from 'redux/slice/auth';
 
-export default function Login() {
+function Login() {
   const {
     control,
     handleSubmit,
@@ -25,89 +27,92 @@ export default function Login() {
     (state) => state.auth
   );
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push('/');
-    }
-  }, [router, isAuthenticated]);
-
   const onSubmit = (data) => {
     dispatch(login(data));
   };
 
-  return (
-    <div className='grid place-items-center h-screen'>
-      <div className='w-9/12 md:w-1/2 lg:w-1/3 px-8 pt-12 pb-16 border-2 border-solid border-primary border-opacity-25 rounded-lg shadow-xl'>
-        <Image
-          src='/assets/learnlit.svg'
-          alt='learnlit'
-          width='200'
-          height='70'
-        />
-        <h2 className='text-2xl my-1.5 ml-1'>Login</h2>
-        {errorMessage && (
-          <Alert severity='error' className='mb-2'>
-            {errorMessage}
-          </Alert>
-        )}
-        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2'>
-          <Controller
-            name='email'
-            control={control}
-            rules={{
-              required: 'Email is required.',
-            }}
-            render={({ field, fieldState: { error } }) => (
-              <Input
-                label='Email'
-                type='email'
-                placeholder='Email'
-                variant='filled'
-                error={!!error}
-                helperText={error ? error.message : null}
-                required
-                {...field}
-              />
-            )}
+  const renderForm = () => {
+    return (
+      <div className='grid place-items-center h-screen'>
+        <div className='w-9/12 md:w-1/2 lg:w-1/3 px-8 pt-12 pb-16 border-2 border-solid border-primary border-opacity-25 rounded-lg shadow-xl'>
+          <Image
+            src='/assets/learnlit.svg'
+            alt='learnlit'
+            width='200'
+            height='70'
           />
+          <h2 className='text-2xl my-1.5 ml-1'>Login</h2>
+          {errorMessage && (
+            <Alert severity='error' className='mb-2'>
+              {errorMessage}
+            </Alert>
+          )}
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className='flex flex-col gap-2'
+          >
+            <Controller
+              name='email'
+              control={control}
+              rules={{
+                required: 'Email is required.',
+              }}
+              render={({ field, fieldState: { error } }) => (
+                <Input
+                  label='Email'
+                  type='email'
+                  placeholder='Email'
+                  variant='filled'
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  required
+                  {...field}
+                />
+              )}
+            />
 
-          <Controller
-            name='password'
-            control={control}
-            rules={{
-              required: true,
-              minLength: {
-                value: 6,
-                message: 'Your password must be at least 6 characters.',
-              },
-              maxLength: {
-                value: 20,
-                message: 'Your password must be maximum 20 characters.',
-              },
-            }}
-            render={({ field, fieldState: { error } }) => (
-              <Input
-                label='Password'
-                type='password'
-                placeholder='Password'
-                variant='filled'
-                required
-                error={!!error}
-                helperText={error ? error.message : null}
-                {...field}
-              />
-            )}
-          />
+            <Controller
+              name='password'
+              control={control}
+              rules={{
+                required: true,
+                minLength: {
+                  value: 6,
+                  message: 'Your password must be at least 6 characters.',
+                },
+                maxLength: {
+                  value: 20,
+                  message: 'Your password must be maximum 20 characters.',
+                },
+              }}
+              render={({ field, fieldState: { error } }) => (
+                <Input
+                  label='Password'
+                  type='password'
+                  placeholder='Password'
+                  variant='filled'
+                  required
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  {...field}
+                />
+              )}
+            />
 
-          <Button
-            label='Sign In'
-            type='submit'
-            variant='contained'
-            className='mt-5'
-            loading={loading}
-          />
-        </form>
+            <Button
+              label='Sign In'
+              type='submit'
+              variant='contained'
+              className='mt-5'
+              loading={loading}
+            />
+          </form>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
+
+  return renderForm();
 }
+
+export default withoutAuth(Login);
