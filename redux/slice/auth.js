@@ -24,7 +24,7 @@ export const signup = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `${API}/auth/signup`,
+        `${API}/auth/register`,
         {
           ...userData,
         },
@@ -72,10 +72,8 @@ export const verifyToken = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${API}/user/current-user`);
-      console.log('response => ', response);
       return response.data;
     } catch (error) {
-      console.log('error => ', error.response);
       if (!error.response) {
         throw error;
       }
@@ -89,7 +87,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     logout(state) {
-      localStorage.removeItem('accessToken');
+      localStorage.removeItem('token');
       Object.assign(state, initialState);
       state.isAuthenticated = false;
     },

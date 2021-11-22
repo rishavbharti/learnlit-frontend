@@ -2,6 +2,10 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "email": "rishavbharti21@gmail.com",
+    "name": "Rishav Bharti"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

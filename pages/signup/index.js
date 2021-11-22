@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -12,9 +11,9 @@ import Button from 'src/components/Button';
 
 import withoutAuth from 'src/components/HOC/withoutAuth';
 
-import { login } from 'redux/slice/auth';
+import { signup } from 'redux/slice/auth';
 
-function Login() {
+function Signup() {
   const {
     control,
     handleSubmit,
@@ -22,14 +21,11 @@ function Login() {
   } = useForm();
 
   const dispatch = useDispatch();
-  const router = useRouter();
 
-  const { loading, isAuthenticated, errorMessage } = useSelector(
-    (state) => state.auth
-  );
+  const { loading, errorMessage } = useSelector((state) => state.auth);
 
   const onSubmit = (data) => {
-    dispatch(login(data));
+    dispatch(signup(data));
   };
 
   const renderForm = () => {
@@ -46,7 +42,8 @@ function Login() {
               />
             </a>
           </Link>
-          <h2 className='text-2xl my-1.5 ml-1'>Login</h2>
+
+          <h2 className='text-2xl my-1.5 ml-1'>Signup</h2>
           {errorMessage && (
             <Alert severity='error' className='mb-2'>
               {errorMessage}
@@ -56,6 +53,26 @@ function Login() {
             onSubmit={handleSubmit(onSubmit)}
             className='flex flex-col gap-2'
           >
+            <Controller
+              name='name'
+              control={control}
+              rules={{
+                required: 'Name is required.',
+              }}
+              render={({ field, fieldState: { error } }) => (
+                <Input
+                  label='Name'
+                  type='name'
+                  placeholder='Name'
+                  variant='filled'
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  required
+                  {...field}
+                />
+              )}
+            />
+
             <Controller
               name='email'
               control={control}
@@ -105,7 +122,7 @@ function Login() {
             />
 
             <Button
-              label='Sign In'
+              label='Sign Up'
               type='submit'
               variant='contained'
               className='mt-5'
@@ -113,9 +130,9 @@ function Login() {
             />
           </form>
           <p className='text-center mt-5'>
-            Don&apos;t have an account?{' '}
-            <Link href='/signup'>
-              <a className='text-primary'>Sign up</a>
+            Already have an account?{' '}
+            <Link href='/login'>
+              <a className='text-primary'>Sign in</a>
             </Link>
           </p>
         </div>
@@ -126,4 +143,4 @@ function Login() {
   return renderForm();
 }
 
-export default withoutAuth(Login);
+export default withoutAuth(Signup);
