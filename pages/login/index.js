@@ -100,7 +100,7 @@ function Login() {
               label='Sign In'
               type='submit'
               variant='contained'
-              className='mt-5'
+              className='mt-5 bg-primary'
               loading={loading}
             />
           </form>

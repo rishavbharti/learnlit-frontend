@@ -10,7 +10,6 @@ import { verifyToken } from 'redux/slice/auth';
 
 import { isBrowser } from 'src/utils';
 
-import 'tailwindcss/tailwind.css';
 import 'styles/globals.css';
 
 const theme = createTheme({
