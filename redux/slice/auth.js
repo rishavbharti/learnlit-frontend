@@ -7,6 +7,7 @@ const initialState = {
   loading: false,
   error: false,
   success: false,
+  verifyToken: { loading: false, error: false, success: false },
   isAuthenticated: false,
   errorMessage: '',
   profile: null,
@@ -136,19 +137,19 @@ export const authSlice = createSlice({
       })
 
       .addCase(verifyToken.pending, (state) => {
-        state.loading = true;
+        state.verifyToken.loading = true;
       })
       .addCase(verifyToken.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = true;
-        state.error = false;
+        state.verifyToken.loading = false;
+        state.verifyToken.success = true;
+        state.verifyToken.error = false;
         state.isAuthenticated = true;
         state.errorMessage = '';
         state.profile = action.payload;
       })
       .addCase(verifyToken.rejected, (state, action) => {
-        state.loading = false;
-        state.error = true;
+        state.verifyToken.loading = false;
+        state.verifyToken.error = true;
         state.isAuthenticated = false;
         // state.errorMessage = action.payload;
       });

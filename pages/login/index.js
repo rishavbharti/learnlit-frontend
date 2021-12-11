@@ -7,8 +7,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Alert from '@mui/material/Alert';
 
-import Input from 'src/components/Input';
 import Button from 'src/components/Button';
+import Input from 'src/components/Input';
+import Logo from 'src/components/Logo';
 
 import withoutAuth from 'src/components/HOC/withoutAuth';
 
@@ -36,16 +37,7 @@ function Login() {
     return (
       <div className='grid place-items-center h-screen'>
         <div className='w-9/12 md:w-1/2 lg:w-1/3 px-8 pt-12 pb-16 border-2 border-solid border-primary border-opacity-25 rounded-lg shadow-xl'>
-          <Link href='/'>
-            <a>
-              <Image
-                src='/assets/learnlit.svg'
-                alt='learnlit'
-                width='200'
-                height='70'
-              />
-            </a>
-          </Link>
+          <Logo variant='main' />
           <h2 className='text-2xl my-1.5 ml-1'>Login</h2>
           {errorMessage && (
             <Alert severity='error' className='mb-2'>

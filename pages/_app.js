@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { wrapper } from 'redux/store';
 import { verifyToken } from 'redux/slice/auth';
@@ -21,12 +22,16 @@ const theme = createTheme({
     secondary: {
       main: '#8E24AA', // #FEA300
     },
+    body: '#FFFFFF',
   },
 });
 
 function App({ Component, pageProps }) {
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const {
+    isAuthenticated,
+    verifyToken: { loading },
+  } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const token = isBrowser() && window.localStorage.getItem('token');
@@ -39,6 +44,14 @@ function App({ Component, pageProps }) {
       dispatch(verifyToken());
     }
   }, [dispatch, isAuthenticated]);
+
+  if (loading) {
+    return (
+      <div className='grid place-items-center h-screen'>
+        <CircularProgress />
+      </div>
+    );
+  }
 
   return (
     <ThemeProvider theme={theme}>
