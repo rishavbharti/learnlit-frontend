@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -19,15 +17,12 @@ function Login() {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    // formState: { errors },
   } = useForm();
 
   const dispatch = useDispatch();
-  const router = useRouter();
 
-  const { loading, isAuthenticated, errorMessage } = useSelector(
-    (state) => state.auth
-  );
+  const { loading, errorMessage } = useSelector((state) => state.auth);
 
   const onSubmit = (data) => {
     dispatch(login(data));
