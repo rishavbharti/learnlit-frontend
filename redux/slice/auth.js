@@ -147,7 +147,7 @@ export const authSlice = createSlice({
         state.errorMessage = '';
         state.profile = action.payload;
       })
-      .addCase(verifyToken.rejected, (state, action) => {
+      .addCase(verifyToken.rejected, (state) => {
         state.verifyToken.loading = false;
         state.verifyToken.error = true;
         state.isAuthenticated = false;
