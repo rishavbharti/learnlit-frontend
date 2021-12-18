@@ -2,15 +2,19 @@ import { configureStore } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 
 import auth from './slice/auth';
-import dialog from './slice/dialog';
+import instructor from './slice/instructor';
+import courses from './slice/course';
 import courseCategories from './slice/courseCategories';
+import dialog from './slice/dialog';
 
 export const makeStore = () =>
   configureStore({
     reducer: {
       auth,
-      dialog,
+      instructor,
+      courses,
       courseCategories,
+      dialog,
     },
     devTools: process.env.NODE_ENV !== 'production',
   });

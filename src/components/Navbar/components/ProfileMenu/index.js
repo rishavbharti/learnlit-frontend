@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Avatar from '@mui/material/Avatar';
@@ -8,25 +9,59 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
+import CastForEducationIcon from '@mui/icons-material/CastForEducation';
 
 import { getInitials } from 'src/utils';
 import { logout } from 'redux/slice/auth';
+import { becomeInstructor } from 'redux/slice/instructor';
 
 export default function AccountMenu() {
   const dispatch = useDispatch();
+  const router = useRouter();
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
   const { profile } = useSelector((state) => state.auth);
+  const { profile: instructorProfile } = useSelector(
+    (state) => state.instructor
+  );
+
+  const handleBecomeInstructor = () => {
+    dispatch(becomeInstructor());
+  };
+
+  const menus =
+    profile?.role.includes('Instructor') || instructorProfile
+      ? [
+          {
+            icon: Settings,
+            label: 'Settings',
+          },
+        ]
+      : [
+          {
+            icon: CastForEducationIcon,
+            label: 'Become an Instructor',
+            handleClick: handleBecomeInstructor,
+          },
+          {
+            icon: Settings,
+            label: 'Settings',
+          },
+        ];
 
   const handleClick = (event) => {
-    console.log('onMouseEnter', event);
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = (event) => {
-    console.log('onMouseLeave', event);
+  const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push('/');
   };
 
   return (
@@ -77,13 +112,18 @@ export default function AccountMenu() {
           <Avatar /> My account
         </MenuItem>
         <Divider />
-        <MenuItem>
-          <ListItemIcon>
-            <Settings fontSize='small' />
-          </ListItemIcon>
-          Settings
-        </MenuItem>
-        <MenuItem onClick={() => dispatch(logout())}>
+        {menus.map((item, index) => {
+          return (
+            <MenuItem key={index} onClick={item?.handleClick}>
+              <ListItemIcon>
+                <item.icon />
+              </ListItemIcon>
+              {item.label}
+            </MenuItem>
+          );
+        })}
+
+        <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize='small' />
           </ListItemIcon>

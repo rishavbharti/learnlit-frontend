@@ -21,7 +21,10 @@ import Button from '../Button';
 import ProfileMenu from './components/ProfileMenu';
 
 export default function Navbar() {
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, profile } = useSelector((state) => state.auth);
+  const { profile: instructorProfile } = useSelector(
+    (state) => state.instructor
+  );
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -124,11 +127,13 @@ export default function Navbar() {
     if (isAuthenticated) {
       return (
         <div className='hidden md:flex gap-8'>
-          <div className='hidden lg:block'>
-            <Link href='/instructor'>
-              <a>Instructor</a>
-            </Link>
-          </div>
+          {(profile?.role.includes('Instructor') || instructorProfile) && (
+            <div className='hidden lg:block'>
+              <Link href='/instructor'>
+                <a>Instructor</a>
+              </Link>
+            </div>
+          )}
 
           <Link href='/my-courses'>
             <a>My learning</a>
