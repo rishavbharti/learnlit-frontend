@@ -10,12 +10,14 @@ import { closeDialog } from 'redux/slice/dialog';
 import Button from '../Button';
 
 export default function DialogBox(props) {
-  const { title, subTitle, renderContent, renderAction } = props;
+  const { title, subTitle, renderContent, renderAction, handleCancelClick } =
+    props;
   const { open } = useSelector((state) => state.dialog);
   const dispatch = useDispatch();
 
   const handleClose = () => {
     dispatch(closeDialog());
+    if (typeof handleCancelClick === 'function') handleCancelClick();
   };
 
   return (

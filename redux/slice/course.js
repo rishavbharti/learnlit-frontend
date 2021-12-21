@@ -8,6 +8,7 @@ const initialState = {
   error: false,
   success: false,
   errorMessage: null,
+  create: { loading: false, error: false, success: false, errorMessage: null },
   courses: [],
 };
 
@@ -26,10 +27,29 @@ export const getTaughtCourses = createAsyncThunk(
   }
 );
 
+export const createCourse = createAsyncThunk(
+  'courses/createCourse',
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${API}/course`, { ...data });
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data.errorMessage);
+    }
+  }
+);
+
 export const coursesSlice = createSlice({
   name: 'courses',
   initialState,
-  reducers: {},
+  reducers: {
+    resetCreateState(state) {
+      Object.assign(state.create, initialState.create);
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getTaughtCourses.pending, (state) => {
@@ -39,7 +59,7 @@ export const coursesSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.error = false;
-        state.errorMessage = '';
+        state.errorMessage = null;
 
         state.courses = action.payload;
       })
@@ -47,8 +67,27 @@ export const coursesSlice = createSlice({
         state.loading = false;
         state.error = true;
         state.errorMessage = action.payload;
+      })
+
+      .addCase(createCourse.pending, (state) => {
+        state.create.loading = true;
+      })
+      .addCase(createCourse.fulfilled, (state, action) => {
+        state.create.loading = false;
+        state.create.success = true;
+        state.create.error = false;
+        state.create.errorMessage = null;
+
+        state.courses = [...state.courses, action.payload];
+      })
+      .addCase(createCourse.rejected, (state, action) => {
+        state.create.loading = false;
+        state.create.error = true;
+        state.create.errorMessage = action.payload;
       });
   },
 });
+
+export const { resetCreateState } = coursesSlice.actions;
 
 export default coursesSlice.reducer;

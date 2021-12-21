@@ -9,6 +9,8 @@ module.exports = {
     colors: {
       primary: '#382D8B',
       secondary: '#8E24AA',
+      border: '#e7e9ed',
+      labelText: '#7C7C7D',
     },
     extend: {},
   },

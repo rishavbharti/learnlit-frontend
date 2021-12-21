@@ -3,7 +3,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import PropTypes from 'prop-types';
 
 const StyledButton = styled(LoadingButton)(() => ({
-  padding: '0.6rem 1.5rem',
+  // padding: '0.6rem 1.5rem',
   borderRadius: 6,
 }));
 
