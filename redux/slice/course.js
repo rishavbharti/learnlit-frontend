@@ -8,8 +8,16 @@ const initialState = {
   error: false,
   success: false,
   errorMessage: null,
-  create: { loading: false, error: false, success: false, errorMessage: null },
   courses: [],
+
+  create: { loading: false, error: false, success: false, errorMessage: null },
+  course: {
+    loading: false,
+    error: false,
+    success: false,
+    errorMessage: null,
+    data: null,
+  },
 };
 
 export const getTaughtCourses = createAsyncThunk(
@@ -32,6 +40,21 @@ export const createCourse = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await axios.post(`${API}/course`, { ...data });
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data.errorMessage);
+    }
+  }
+);
+
+export const fetchCourse = createAsyncThunk(
+  'courses/fetchCourse',
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API}/course/${id}`);
       return response.data;
     } catch (error) {
       if (!error.response) {
@@ -84,6 +107,23 @@ export const coursesSlice = createSlice({
         state.create.loading = false;
         state.create.error = true;
         state.create.errorMessage = action.payload;
+      })
+
+      .addCase(fetchCourse.pending, (state) => {
+        state.course.loading = true;
+      })
+      .addCase(fetchCourse.fulfilled, (state, action) => {
+        state.course.loading = false;
+        state.course.success = true;
+        state.course.error = false;
+        state.course.errorMessage = null;
+
+        state.course.data = action.payload;
+      })
+      .addCase(fetchCourse.rejected, (state, action) => {
+        state.course.loading = false;
+        state.course.error = true;
+        state.course.errorMessage = action.payload;
       });
   },
 });

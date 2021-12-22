@@ -12,8 +12,8 @@ import { openDialog } from 'redux/slice/dialog';
 import { getTaughtCourses } from 'redux/slice/course';
 
 import OnlineLearning from 'public/assets/online_learning.svg';
-import CourseCard from 'src/components/CourseCard.js';
-import CenterAligned from 'src/components/CenterAligned.js';
+import CourseCard from 'src/components/CourseCard/index.js';
+import CenterAligned from 'src/components/CenterAligned/index.js';
 
 const Courses = () => {
   const dispatch = useDispatch();
@@ -32,7 +32,6 @@ const Courses = () => {
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 sm:gap-10'>
         {courses.map((course, index) => (
           <CourseCard key={index} course={course} />
-          // <h2 key={index}>{course.title}</h2>
         ))}
       </div>
     );

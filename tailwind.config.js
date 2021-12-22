@@ -10,6 +10,7 @@ module.exports = {
       primary: '#382D8B',
       secondary: '#8E24AA',
       border: '#e7e9ed',
+      secondaryBg: '#f8f9fa',
       labelText: '#7C7C7D',
       hoverBg: 'rgba(77, 79, 83, 0.4)',
       black: '#000',
