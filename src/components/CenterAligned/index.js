@@ -1,11 +1,11 @@
 import React from 'react';
-import clsx from 'clsx';
+import classnames from 'classnames';
 
 const CenterAligned = (props) => {
   const { className } = props;
 
   return (
-    <div className={clsx('grid place-items-center h-max', className)}>
+    <div className={classnames('grid place-items-center h-max', className)}>
       {props.children}
     </div>
   );

@@ -10,7 +10,7 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 
 import Button from 'src/components/Button';
 import CenterAligned from '../CenterAligned/index.js';
-import CourseCurriculum from '../CreateCourseCurriculum/index.js';
+import CourseCurriculum from '../CreateCurriculum/index.js';
 
 const ManageCourseLayout = () => {
   const router = useRouter();

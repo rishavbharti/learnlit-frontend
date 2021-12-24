@@ -1,4 +1,5 @@
 import * as React from 'react';
+import classnames from 'classnames';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -16,6 +17,7 @@ export default function DropdownInput(props) {
     required,
     error,
     helperText,
+    containerClass,
   } = props;
 
   const onChange = (event) => {
@@ -26,7 +28,7 @@ export default function DropdownInput(props) {
     <FormControl
       variant='filled'
       sx={{ minWidth: 120 }}
-      className='w-full'
+      className={classnames('w-full', containerClass)}
       required={required}
       error={error}
     >
@@ -37,8 +39,8 @@ export default function DropdownInput(props) {
         value={value}
         onChange={onChange}
       >
-        {data.map((datum) => (
-          <MenuItem value={valueExtractor(datum)} key={datum?.id}>
+        {data.map((datum, index) => (
+          <MenuItem value={valueExtractor(datum)} key={datum?.id || index}>
             {labelExtractor(datum)}
           </MenuItem>
         ))}
