@@ -1,24 +1,63 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { addChapter, editChapter } from 'redux/slice/course';
 
 import Button from 'src/components/Button';
 import Input from 'src/components/Input';
 
-const ChapterForm = (props) => {
-  const { onSubmit } = props;
+const ChapterForm = () => {
+  const dispatch = useDispatch();
+  const { isEditMode, currChapterData } = useSelector(
+    (state) => state.courses.course
+  );
 
   const {
     control,
     handleSubmit,
+    reset,
+    setValue,
     // formState: { errors },
   } = useForm();
+  //   {
+  //   defaultValues: {
+  //     chapter: {
+  //       chapterTitle: '',
+  //       duration: '',
+  //     },
+  //   },
+  // }
+
+  useEffect(() => {
+    reset();
+  }, [reset, isEditMode]);
+
+  useEffect(() => {
+    if (isEditMode) {
+      setValue('chapterTitle', currChapterData.chapterTitle, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+      setValue('duration', currChapterData.duration, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+  }, [isEditMode, setValue, currChapterData]);
+
+  // {
+  //   shouldValidate: true,
+  //   shouldDirty: true,
+  // }
 
   return (
     <div className='flex flex-col gap-3 h-min'>
-      <h2 className='text-lg font-semibold'>Chapter</h2>
-
+      <h2 className='text-lg font-semibold'>
+        {isEditMode ? 'Edit Chapter' : 'Add new Chapter'}
+      </h2>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        // onSubmit={handleSubmit(onSubmit)}
+        onSubmit={(e) => e.preventDefault()}
         className='flex flex-col sm:flex-row gap-2'
       >
         <Controller
@@ -69,10 +108,14 @@ const ChapterForm = (props) => {
       </form>
 
       <Button
-        label='Add'
+        label={isEditMode ? 'Update' : 'Add'}
         className='bg-primary w-min ml-auto'
         variant='contained'
-        onClick={handleSubmit(onSubmit)}
+        onClick={handleSubmit((data) => {
+          isEditMode
+            ? dispatch(editChapter({ data }))
+            : dispatch(addChapter({ data }));
+        })}
       />
     </div>
   );

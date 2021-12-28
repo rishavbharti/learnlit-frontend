@@ -1,18 +1,27 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import { styled } from '@mui/material/styles';
+import IconButton from '@mui/material/IconButton';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import AddIcon from '@mui/icons-material/Add';
-import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 
 import Button from 'src/components/Button';
 import ListItem from './ListItem';
+import {
+  setCurrChapterData,
+  setCurrChapterIndex,
+  setIsEditMode,
+  setRenderChapterForm,
+  setRenderLectureForm,
+} from 'redux/slice/course';
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -46,17 +55,17 @@ const AccordionSummary = styled((props) => (
 }));
 
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
-  padding: theme.spacing(2),
+  padding: theme.spacing(1.3),
   borderTop: '1px solid rgba(0, 0, 0, .125)',
 }));
 
-export default function CurriculumList(props) {
-  const { curriculum, onChapterClick, onLectureClick } = props;
+export default function CurriculumList() {
+  const dispatch = useDispatch();
+  const { data } = useSelector((state) => state.courses.course);
 
-  const renderLectures = (lectures) => {
+  const renderLectures = (lectures, chapterIndex) => {
     return lectures.map((lecture, index) => {
       const handleClick = (event) => {
-        event.preventDefault();
         event.stopPropagation();
 
         // scrollElementIntoView(lectureId);
@@ -69,7 +78,11 @@ export default function CurriculumList(props) {
           onClick={handleClick}
           key={index}
         >
-          <ListItem title={lecture.title} duration={lecture.duration} />
+          <ListItem
+            lecture={lecture}
+            chapterIndex={chapterIndex}
+            lectureIndex={index}
+          />
         </AccordionDetails>
       );
     });
@@ -80,46 +93,55 @@ export default function CurriculumList(props) {
       <div className='border border-solid border-border'>
         <Accordion TransitionProps={{ unmountOnExit: true }} key={index}>
           <AccordionSummary>
-            <p className='text-body font-semibold'>{chapter.chapterTitle}</p>
+            <div className='flex gap-5 justify-between items-center w-full mr-5'>
+              <p className='text-body break-all font-semibold'>
+                {chapter.chapterTitle}
+              </p>
+              <p className='text-labelText text-sm'>{chapter?.duration}</p>
+            </div>
+            <div className='flex gap-3'>
+              <IconButton aria-label='edit' size='small'>
+                <EditOutlinedIcon
+                  fontSize='small'
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    dispatch(setCurrChapterIndex(index));
+                    dispatch(setCurrChapterData(chapter));
+                    dispatch(setIsEditMode(true));
+                    dispatch(setRenderChapterForm());
+                  }}
+                />
+              </IconButton>
+              <IconButton aria-label='delete' size='small'>
+                <DeleteOutlinedIcon
+                  fontSize='small'
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                />
+              </IconButton>
+            </div>
           </AccordionSummary>
-          {chapter?.content && renderLectures(chapter.content)}
+          {chapter?.content && renderLectures(chapter.content, index)}
         </Accordion>
         <Button
           label='Add Chapter Item'
           className='w-full normal-case'
           startIcon={<AddIcon />}
-          onClick={() => onLectureClick(index)}
+          onClick={() => {
+            dispatch(setCurrChapterIndex(index));
+            dispatch(setIsEditMode(false));
+            dispatch(setRenderLectureForm());
+          }}
         />
       </div>
     );
   };
 
   const renderAccordion = () =>
-    curriculum.map((chapter, index) => renderChapter(chapter, index));
+    data?.curriculum.map((chapter, index) => renderChapter(chapter, index));
 
-  return (
-    <>
-      {renderAccordion()}
-      <div className='bg-tertiaryBg mt-5 p-2'>
-        <Button
-          label='Add new Chapter'
-          className='text-lg normal-case rounded-none bg-tertiaryBg'
-          startIcon={<AddCircleOutlineOutlinedIcon />}
-          onClick={onChapterClick}
-        />
-      </div>
-    </>
-  );
+  return <>{renderAccordion()}</>;
 }
 
-CurriculumList.propTypes = {
-  activeContent: PropTypes.shape({
-    moduleId: PropTypes.string,
-    lectureId: PropTypes.string,
-  }),
-  setActiveContent: PropTypes.func,
-  viewOnly: PropTypes.bool,
-  moduleIds: PropTypes.arrayOf(PropTypes.string).isRequired,
-  moduleLectureMap: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string))
-    .isRequired,
-};
+CurriculumList.propTypes = {};

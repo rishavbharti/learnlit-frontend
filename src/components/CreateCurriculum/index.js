@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Alert from '@mui/material/Alert';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
@@ -9,40 +9,17 @@ import Button from 'src/components/Button';
 import CurriculumList from 'src/components/CurriculumList';
 import ChapterForm from './ChapterForm';
 import LectureForm from './LectureForm';
+import { setIsEditMode, setRenderChapterForm } from 'redux/slice/course';
 
 const CreateCurriculum = () => {
-  const { data } = useSelector((state) => state.courses.course);
-  const [renderChapterForm, setRenderChapterForm] = useState(false);
-  const [renderLectureForm, setRenderLectureForm] = useState(false);
-  const [currChapterIndex, setCurrChapterIndex] = useState();
-  const [curriculum, setCurriculum] = useState(data?.curriculum || []);
-
-  const handleChapterSubmit = (data) => {
-    data.content = [];
-    setCurriculum([...curriculum, data]);
-  };
-
-  const handleLectureSubmit = (data) => {
-    const newCurriculum = curriculum.map((chapter, index) => {
-      if (index === currChapterIndex) {
-        chapter.content = [...chapter.content, data];
-        // break
-      }
-      return chapter;
-    });
-    setCurriculum(newCurriculum);
-    console.log(curriculum);
-  };
+  const dispatch = useDispatch();
+  const { renderChapterForm, renderLectureForm, data } = useSelector(
+    (state) => state.courses.course
+  );
 
   const showChapterForm = () => {
-    setRenderLectureForm(false);
-    setRenderChapterForm(true);
-  };
-
-  const showLectureForm = (index) => {
-    setCurrChapterIndex(index);
-    setRenderChapterForm(false);
-    setRenderLectureForm(true);
+    dispatch(setIsEditMode(false));
+    dispatch(setRenderChapterForm());
   };
 
   const renderForm = () => {
@@ -62,11 +39,11 @@ const CreateCurriculum = () => {
     }
 
     if (renderChapterForm) {
-      return <ChapterForm onSubmit={handleChapterSubmit} />;
+      return <ChapterForm />;
     }
 
     if (renderLectureForm) {
-      return <LectureForm onSubmit={handleLectureSubmit} />;
+      return <LectureForm />;
     }
   };
 
@@ -77,13 +54,24 @@ const CreateCurriculum = () => {
         assignments, and more. Click the button below to get started.
       </Alert>
       <div className='flex flex-col lg:flex-row gap-5 mt-5'>
-        <div className='w-full lg:w-2/3 bg-formBg p-3'>{renderForm()}</div>
-        <div className='w-full lg:w-1/3 bg-formBg p-3'>
-          <CurriculumList
-            curriculum={curriculum}
-            onChapterClick={showChapterForm}
-            onLectureClick={showLectureForm}
-          />
+        <div className='w-full lg:w-7/12 bg-formBg p-3 h-min'>
+          {renderForm()}
+        </div>
+        <div
+          className='w-full lg:w-5/12 bg-formBg flex flex-col gap-5 p-3'
+          style={{ maxHeight: '600px' }}
+        >
+          <div className='overflow-auto h-5/6'>
+            <CurriculumList />
+          </div>
+          <div className='bg-tertiaryBg p-2 sticky'>
+            <Button
+              label='Add new Chapter'
+              className='text-lg normal-case rounded-none bg-tertiaryBg'
+              startIcon={<AddCircleOutlineOutlinedIcon />}
+              onClick={showChapterForm}
+            />
+          </div>
         </div>
       </div>
     </div>

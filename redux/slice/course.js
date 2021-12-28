@@ -16,6 +16,13 @@ const initialState = {
     error: false,
     success: false,
     errorMessage: null,
+    isEditMode: false,
+    renderChapterForm: false,
+    renderLectureForm: false,
+    currChapterIndex: null,
+    currChapterData: null,
+    currLectureIndex: null,
+    currLectureData: null,
     data: null,
   },
 };
@@ -69,6 +76,85 @@ export const coursesSlice = createSlice({
   name: 'courses',
   initialState,
   reducers: {
+    addChapter(state, action) {
+      const { data } = action.payload;
+      data.content = [];
+      state.course.data.curriculum.push(data);
+    },
+    editChapter(state, action) {
+      const { data } = action.payload;
+      const chapterIndex = state.course.currChapterIndex;
+
+      const newCurriculum = state.course.data.curriculum.map(
+        (chapter, index) => {
+          if (index === chapterIndex) {
+            chapter.chapterTitle = data.chapterTitle;
+            chapter.duration = data?.duration;
+          }
+          return chapter;
+        }
+      );
+      state.course.data.curriculum = newCurriculum;
+    },
+    addLecture(state, action) {
+      const { data } = action.payload;
+      const chapterIndex = state.course.currChapterIndex;
+
+      const newCurriculum = state.course.data.curriculum.map(
+        (chapter, index) => {
+          if (index === chapterIndex) {
+            chapter.content = [...chapter.content, data];
+          }
+          return chapter;
+        }
+      );
+      state.course.data.curriculum = newCurriculum;
+    },
+    editLecture(state, action) {
+      const { data } = action.payload;
+      const chapterIndex = state.course.currChapterIndex;
+      const lectureIndex = state.course.currLectureIndex;
+
+      const newCurriculum = state.course.data.curriculum.map(
+        (chapter, index) => {
+          if (index === chapterIndex) {
+            const updatedContent = chapter.content.map((item, index) => {
+              if (index === lectureIndex) {
+                item = data;
+              }
+              return item;
+            });
+            chapter.content = updatedContent;
+            return chapter;
+          }
+          return chapter;
+        }
+      );
+      state.course.data.curriculum = newCurriculum;
+    },
+    setCurrChapterIndex(state, action) {
+      state.course.currChapterIndex = action.payload;
+    },
+    setCurrChapterData(state, action) {
+      state.course.currChapterData = action.payload;
+    },
+    setCurrLectureIndex(state, action) {
+      state.course.currLectureIndex = action.payload;
+    },
+    setCurrLectureData(state, action) {
+      state.course.currLectureData = action.payload;
+    },
+    setIsEditMode(state, action) {
+      state.course.isEditMode = action.payload;
+    },
+    setRenderChapterForm(state) {
+      state.course.renderChapterForm = true;
+      state.course.renderLectureForm = false;
+    },
+    setRenderLectureForm(state) {
+      state.course.renderLectureForm = true;
+      state.course.renderChapterForm = false;
+    },
     resetCreateState(state) {
       Object.assign(state.create, initialState.create);
     },
@@ -128,6 +214,19 @@ export const coursesSlice = createSlice({
   },
 });
 
-export const { resetCreateState } = coursesSlice.actions;
+export const {
+  addChapter,
+  editChapter,
+  addLecture,
+  editLecture,
+  setCurrChapterIndex,
+  setCurrChapterData,
+  setCurrLectureIndex,
+  setCurrLectureData,
+  setIsEditMode,
+  setRenderChapterForm,
+  setRenderLectureForm,
+  resetCreateState,
+} = coursesSlice.actions;
 
 export default coursesSlice.reducer;

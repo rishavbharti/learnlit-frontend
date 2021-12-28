@@ -1,24 +1,62 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { useSelector, useDispatch } from 'react-redux';
+import { addLecture, editLecture } from 'redux/slice/course';
 
 import Button from 'src/components/Button';
 import DropdownInput from 'src/components/DropdownInput';
 import Input from 'src/components/Input';
 
-const LectureForm = (props) => {
-  const { onSubmit } = props;
+const LectureForm = () => {
+  const dispatch = useDispatch();
+  const { isEditMode, currLectureData } = useSelector(
+    (state) => state.courses.course
+  );
 
   const {
     control,
     handleSubmit,
+    reset,
+    setValue,
     // formState: { errors },
   } = useForm();
 
+  useEffect(() => {
+    reset();
+  }, [reset, isEditMode]);
+
+  useEffect(() => {
+    if (isEditMode) {
+      setValue('title', currLectureData.title, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+      setValue('class', currLectureData.class, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+      setValue('duration', currLectureData.duration, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+      setValue('embedUrl', currLectureData.embedUrl, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+  }, [isEditMode, setValue, currLectureData]);
+
   return (
     <div className='flex flex-col gap-3 h-min'>
-      <h2 className='text-lg font-semibold'>Lecture</h2>
+      <h2 className='text-lg font-semibold'>
+        {isEditMode ? 'Edit Chapter Item' : 'Add new Chapter Item'}
+      </h2>
 
-      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2'>
+      <form
+        // onSubmit={handleSubmit(onSubmit)}
+        onSubmit={(e) => e.preventDefault()}
+        className='flex flex-col gap-2'
+      >
         <Controller
           name='title'
           control={control}
@@ -112,10 +150,14 @@ const LectureForm = (props) => {
       </form>
 
       <Button
-        label='Add'
+        label={isEditMode ? 'Update' : 'Add'}
         className='bg-primary w-min ml-auto'
         variant='contained'
-        onClick={handleSubmit(onSubmit)}
+        onClick={handleSubmit((data) =>
+          isEditMode
+            ? dispatch(editLecture({ data }))
+            : dispatch(addLecture({ data }))
+        )}
       />
     </div>
   );
