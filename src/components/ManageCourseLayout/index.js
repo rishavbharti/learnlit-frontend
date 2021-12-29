@@ -9,8 +9,8 @@ import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlin
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 
 import Button from 'src/components/Button';
-import CenterAligned from '../CenterAligned/index.js';
-import CourseCurriculum from '../CreateCurriculum/index.js';
+import CenterAligned from '../CenterAligned';
+import CreateCurriculum from './CreateCurriculum';
 
 const ManageCourseLayout = () => {
   const router = useRouter();
@@ -67,7 +67,7 @@ const ManageCourseLayout = () => {
 
     switch (activePath) {
       case 'c':
-        return <CourseCurriculum />;
+        return <CreateCurriculum />;
 
       default:
         return null;

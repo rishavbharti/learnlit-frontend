@@ -16,7 +16,7 @@ import {
   setRenderLectureForm,
 } from 'redux/slice/course';
 
-export default function ListItem(props) {
+export default function ChapterItem(props) {
   const { lecture, chapterIndex, lectureIndex } = props;
   const dispatch = useDispatch();
 
@@ -61,7 +61,7 @@ export default function ListItem(props) {
   );
 }
 
-ListItem.propTypes = {
+ChapterItem.propTypes = {
   lecture: PropTypes.object.isRequired,
   chapterIndex: PropTypes.number.isRequired,
   lectureIndex: PropTypes.number.isRequired,

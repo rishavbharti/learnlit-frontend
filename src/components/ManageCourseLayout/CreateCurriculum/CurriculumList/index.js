@@ -12,7 +12,7 @@ import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 
 import Button from 'src/components/Button';
-import ListItem from './ListItem';
+import ChapterItem from '../ChapterItem';
 import {
   deleteChapter,
   setCurrChapterData,
@@ -85,7 +85,7 @@ export default function CurriculumList() {
           onClick={handleClick}
           key={index}
         >
-          <ListItem
+          <ChapterItem
             lecture={lecture}
             chapterIndex={chapterIndex}
             lectureIndex={index}

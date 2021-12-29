@@ -13,7 +13,7 @@ const EditCourse = () => {
     router.query.id && dispatch(fetchCourse(router.query.id));
   }, [dispatch, router.query.id]);
 
-  return <ManageCourseLayout>grtgtr</ManageCourseLayout>;
+  return <ManageCourseLayout />;
 };
 
 export default EditCourse;
