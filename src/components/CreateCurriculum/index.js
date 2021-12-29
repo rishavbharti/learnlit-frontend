@@ -9,6 +9,7 @@ import Button from 'src/components/Button';
 import CurriculumList from 'src/components/CurriculumList';
 import ChapterForm from './ChapterForm';
 import LectureForm from './LectureForm';
+
 import { setIsEditMode, setRenderChapterForm } from 'redux/slice/course';
 
 const CreateCurriculum = () => {
@@ -23,11 +24,15 @@ const CreateCurriculum = () => {
   };
 
   const renderForm = () => {
-    if (!data?.curriculum.length && !renderChapterForm && !renderLectureForm) {
+    if (!renderChapterForm && !renderLectureForm) {
       return (
         <CenterAligned className='py-20 gap-5'>
           <AddCircleOutlineOutlinedIcon fontSize='large' />
-          <p className='font-medium'>Start by creating the First Chapter</p>
+          <p className='font-medium'>
+            {!data?.curriculum.length
+              ? 'Start by creating the First Chapter'
+              : 'Expand the Curriculum'}
+          </p>
           <Button
             label='Add new Chapter'
             className='bg-primary'
@@ -59,7 +64,7 @@ const CreateCurriculum = () => {
         </div>
         <div
           className='w-full lg:w-5/12 bg-formBg flex flex-col gap-5 p-3'
-          style={{ maxHeight: '600px' }}
+          style={{ maxHeight: '485px' }}
         >
           <div className='overflow-auto h-5/6'>
             <CurriculumList />

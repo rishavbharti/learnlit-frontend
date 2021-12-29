@@ -1,7 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
 
 import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
@@ -16,6 +14,7 @@ import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Button from 'src/components/Button';
 import ListItem from './ListItem';
 import {
+  deleteChapter,
   setCurrChapterData,
   setCurrChapterIndex,
   setIsEditMode,
@@ -25,7 +24,7 @@ import {
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
-))(({ theme }) => ({
+))({
   // border: `1px solid ${theme.palette.divider}`,
   '&:not(:last-child)': {
     borderBottom: 0,
@@ -33,7 +32,7 @@ const Accordion = styled((props) => (
   '&:before': {
     display: 'none',
   },
-}));
+});
 
 const AccordionSummary = styled((props) => (
   <MuiAccordionSummary
@@ -61,19 +60,27 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 export default function CurriculumList() {
   const dispatch = useDispatch();
-  const { data } = useSelector((state) => state.courses.course);
+  const [expanded, setExpanded] = useState([]);
+
+  const { data, currChapterIndex } = useSelector(
+    (state) => state.courses.course
+  );
+
+  useEffect(() => {
+    setExpanded([...expanded, currChapterIndex]);
+  }, [currChapterIndex]);
 
   const renderLectures = (lectures, chapterIndex) => {
     return lectures.map((lecture, index) => {
       const handleClick = (event) => {
         event.stopPropagation();
 
-        // scrollElementIntoView(lectureId);
+        // scrollElementIntoView(index);
       };
 
       return (
         <AccordionDetails
-          className={classnames('group cursor-pointer hover:bg-accordionBg')}
+          className='cursor-pointer'
           id={index}
           onClick={handleClick}
           key={index}
@@ -88,10 +95,43 @@ export default function CurriculumList() {
     });
   };
 
+  const handleChange = (index) => (event, newExpanded) => {
+    if (newExpanded) {
+      setExpanded([...expanded, index]);
+    } else {
+      const updatedExpandedItems = expanded.filter((id) => id !== index);
+      setExpanded(updatedExpandedItems);
+    }
+  };
+
   const renderChapter = (chapter, index) => {
+    const handleAddChapterItem = () => {
+      dispatch(setCurrChapterIndex(index));
+      dispatch(setIsEditMode(false));
+      dispatch(setRenderLectureForm());
+    };
+
+    const handleEditChapter = (e) => {
+      e.stopPropagation();
+      dispatch(setCurrChapterIndex(index));
+      dispatch(setCurrChapterData(chapter));
+      dispatch(setIsEditMode(true));
+      dispatch(setRenderChapterForm());
+    };
+
+    const handleDeleteChapter = (e) => {
+      e.stopPropagation();
+      dispatch(deleteChapter(index));
+    };
+
     return (
       <div className='border border-solid border-border'>
-        <Accordion TransitionProps={{ unmountOnExit: true }} key={index}>
+        <Accordion
+          expanded={expanded.includes(index)}
+          onChange={handleChange(index)}
+          TransitionProps={{ unmountOnExit: true }}
+          key={index}
+        >
           <AccordionSummary>
             <div className='flex gap-5 justify-between items-center w-full mr-5'>
               <p className='text-body break-all font-semibold'>
@@ -103,21 +143,13 @@ export default function CurriculumList() {
               <IconButton aria-label='edit' size='small'>
                 <EditOutlinedIcon
                   fontSize='small'
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    dispatch(setCurrChapterIndex(index));
-                    dispatch(setCurrChapterData(chapter));
-                    dispatch(setIsEditMode(true));
-                    dispatch(setRenderChapterForm());
-                  }}
+                  onClick={handleEditChapter}
                 />
               </IconButton>
               <IconButton aria-label='delete' size='small'>
                 <DeleteOutlinedIcon
                   fontSize='small'
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
+                  onClick={handleDeleteChapter}
                 />
               </IconButton>
             </div>
@@ -128,11 +160,7 @@ export default function CurriculumList() {
           label='Add Chapter Item'
           className='w-full normal-case'
           startIcon={<AddIcon />}
-          onClick={() => {
-            dispatch(setCurrChapterIndex(index));
-            dispatch(setIsEditMode(false));
-            dispatch(setRenderLectureForm());
-          }}
+          onClick={handleAddChapterItem}
         />
       </div>
     );
@@ -143,5 +171,3 @@ export default function CurriculumList() {
 
   return <>{renderAccordion()}</>;
 }
-
-CurriculumList.propTypes = {};

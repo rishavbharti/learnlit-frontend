@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { addChapter, editChapter } from 'redux/slice/course';
 
 import Button from 'src/components/Button';
 import Input from 'src/components/Input';
+
+import { addChapter, editChapter } from 'redux/slice/course';
 
 const ChapterForm = () => {
   const dispatch = useDispatch();
@@ -18,19 +19,12 @@ const ChapterForm = () => {
     reset,
     setValue,
     // formState: { errors },
-  } = useForm();
-  //   {
-  //   defaultValues: {
-  //     chapter: {
-  //       chapterTitle: '',
-  //       duration: '',
-  //     },
-  //   },
-  // }
-
-  useEffect(() => {
-    reset();
-  }, [reset, isEditMode]);
+  } = useForm({
+    defaultValues: {
+      chapterTitle: '',
+      duration: '',
+    },
+  });
 
   useEffect(() => {
     if (isEditMode) {
@@ -44,11 +38,6 @@ const ChapterForm = () => {
       });
     }
   }, [isEditMode, setValue, currChapterData]);
-
-  // {
-  //   shouldValidate: true,
-  //   shouldDirty: true,
-  // }
 
   return (
     <div className='flex flex-col gap-3 h-min'>
@@ -115,6 +104,8 @@ const ChapterForm = () => {
           isEditMode
             ? dispatch(editChapter({ data }))
             : dispatch(addChapter({ data }));
+
+          reset();
         })}
       />
     </div>

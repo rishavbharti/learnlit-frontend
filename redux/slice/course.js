@@ -95,6 +95,7 @@ export const coursesSlice = createSlice({
         }
       );
       state.course.data.curriculum = newCurriculum;
+      state.course.isEditMode = false;
     },
     addLecture(state, action) {
       const { data } = action.payload;
@@ -125,12 +126,33 @@ export const coursesSlice = createSlice({
               return item;
             });
             chapter.content = updatedContent;
-            return chapter;
           }
           return chapter;
         }
       );
       state.course.data.curriculum = newCurriculum;
+      state.course.isEditMode = false;
+    },
+    deleteChapter(state, action) {
+      const updatedCurriculum = state.course.data.curriculum.filter(
+        (chapter, index) => index !== action.payload
+      );
+      state.course.data.curriculum = updatedCurriculum;
+    },
+    deleteLecture(state, action) {
+      const { chapterIndex, lectureIndex } = action.payload;
+      const updatedCurriculum = state.course.data.curriculum.map(
+        (chapter, index) => {
+          if (index === chapterIndex) {
+            const updatedContent = chapter.content.filter(
+              (item, index) => index !== lectureIndex
+            );
+            chapter.content = updatedContent;
+          }
+          return chapter;
+        }
+      );
+      state.course.data.curriculum = updatedCurriculum;
     },
     setCurrChapterIndex(state, action) {
       state.course.currChapterIndex = action.payload;
@@ -219,6 +241,8 @@ export const {
   editChapter,
   addLecture,
   editLecture,
+  deleteChapter,
+  deleteLecture,
   setCurrChapterIndex,
   setCurrChapterData,
   setCurrLectureIndex,

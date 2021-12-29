@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
-import { addLecture, editLecture } from 'redux/slice/course';
 
 import Button from 'src/components/Button';
 import DropdownInput from 'src/components/DropdownInput';
 import Input from 'src/components/Input';
+
+import { addLecture, editLecture } from 'redux/slice/course';
 
 const LectureForm = () => {
   const dispatch = useDispatch();
@@ -18,12 +19,15 @@ const LectureForm = () => {
     handleSubmit,
     reset,
     setValue,
-    // formState: { errors },
-  } = useForm();
-
-  useEffect(() => {
-    reset();
-  }, [reset, isEditMode]);
+    // formState: { isDirty, touchedFields, errors },
+  } = useForm({
+    defaultValues: {
+      title: '',
+      class: '',
+      duration: '',
+      embedUrl: '',
+    },
+  });
 
   useEffect(() => {
     if (isEditMode) {
@@ -153,11 +157,13 @@ const LectureForm = () => {
         label={isEditMode ? 'Update' : 'Add'}
         className='bg-primary w-min ml-auto'
         variant='contained'
-        onClick={handleSubmit((data) =>
+        onClick={handleSubmit((data) => {
           isEditMode
             ? dispatch(editLecture({ data }))
-            : dispatch(addLecture({ data }))
-        )}
+            : dispatch(addLecture({ data }));
+
+          reset();
+        })}
       />
     </div>
   );
