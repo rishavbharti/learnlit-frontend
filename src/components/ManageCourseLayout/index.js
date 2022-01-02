@@ -11,6 +11,7 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import Button from 'src/components/Button';
 import CenterAligned from '../CenterAligned';
 import CreateCurriculum from './CreateCurriculum';
+import CourseDetails from './CourseDetails';
 
 const ManageCourseLayout = () => {
   const router = useRouter();
@@ -66,6 +67,8 @@ const ManageCourseLayout = () => {
     }
 
     switch (activePath) {
+      case 'd':
+        return <CourseDetails />;
       case 'c':
         return <CreateCurriculum />;
 

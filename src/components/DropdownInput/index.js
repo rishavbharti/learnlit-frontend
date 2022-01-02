@@ -39,7 +39,7 @@ export default function DropdownInput(props) {
         value={value}
         onChange={onChange}
       >
-        {data.map((datum, index) => (
+        {data?.map((datum, index) => (
           <MenuItem value={valueExtractor(datum)} key={datum?.id || index}>
             {labelExtractor(datum)}
           </MenuItem>

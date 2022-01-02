@@ -21,7 +21,7 @@ const CreateCourseDialog = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (categories.length === 0) {
+    if (!categories.length) {
       dispatch(getCategories());
     }
   }, [dispatch, categories]);
