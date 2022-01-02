@@ -1,4 +1,4 @@
-const colors = require('tailwindcss/colors');
+// const colors = require('tailwindcss/colors');
 
 module.exports = {
   content: [
@@ -14,6 +14,7 @@ module.exports = {
       tertiaryBg: '#f1f1fc',
       labelText: '#7C7C7D',
       hoverBg: 'rgba(77, 79, 83, 0.4)',
+      error: '#d32f2f',
       black: '#000',
       white: '#fff',
     },
