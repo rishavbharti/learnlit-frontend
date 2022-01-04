@@ -6,12 +6,15 @@ import CircularProgress from '@mui/material/CircularProgress';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import TocOutlinedIcon from '@mui/icons-material/TocOutlined';
 import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
+import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 
 import Button from 'src/components/Button';
 import CenterAligned from '../CenterAligned';
 import CreateCurriculum from './CreateCurriculum';
 import CourseDetails from './CourseDetails';
+import IntendedLearners from './IntendedLearners';
+import Pricing from './Pricing';
 
 const ManageCourseLayout = () => {
   const router = useRouter();
@@ -29,6 +32,11 @@ const ManageCourseLayout = () => {
       icon: TocOutlinedIcon,
       label: 'Curriculum',
       query: 'c',
+    },
+    {
+      icon: PeopleOutlinedIcon,
+      label: 'Intended learners',
+      query: 'l',
     },
     {
       icon: MonetizationOnOutlinedIcon,
@@ -71,7 +79,10 @@ const ManageCourseLayout = () => {
         return <CourseDetails />;
       case 'c':
         return <CreateCurriculum />;
-
+      case 'l':
+        return <IntendedLearners />;
+      case 'p':
+        return <Pricing />;
       default:
         return null;
     }
@@ -81,12 +92,12 @@ const ManageCourseLayout = () => {
     <div>
       <div className='bg-black text-white h-14 px-16 md:px-40 flex justify-between items-center'>
         <h2 className='text-lg font-bold'>{data?.title}</h2>
-        <Button
+        {/* <Button
           label='Save'
           onClick={() => {}}
           variant='contained'
           className='bg-primary'
-        />
+        /> */}
       </div>
       <div className='flex flex-col lg:flex-row gap-5 px-3 lg:px-12 lg:py-5'>
         <div className='grid grid-cols-2 sm:grid-cols-4 lg:w-1/6 lg:flex lg:flex-col justify-between gap-3 mt-5 lg:mt-14 h-max'>

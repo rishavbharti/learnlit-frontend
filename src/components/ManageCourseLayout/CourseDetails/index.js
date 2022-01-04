@@ -5,12 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Input from 'src/components/Input';
 import RichTextEditor from 'src/components/RichTextEditor';
-import Button from 'src/components/Button';
 import DropdownInput from 'src/components/DropdownInput';
 
 import { getCategories } from 'redux/slice/courseCategories';
 
 import { languages } from 'src/data/languages';
+import MenuPageLayout from '../MenuPageLayout';
 
 const CourseDetails = () => {
   const dispatch = useDispatch();
@@ -18,7 +18,7 @@ const CourseDetails = () => {
   const [category, setCategory] = useState('');
   const [subCategoriesList, setSubCategoriesList] = useState([]);
 
-  const { control, handleSubmit, reset, getValues, setValue } = useForm({
+  const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
       details: {
         title: '',
@@ -236,12 +236,15 @@ const CourseDetails = () => {
             />
           </div>
         </div>
-        <Button type='submit' label='Save' />
       </form>
     );
   };
 
-  return <div>{renderForm()}</div>;
+  return (
+    <MenuPageLayout title='Course Details' handleSave={handleSubmit(onSubmit)}>
+      {renderForm()}
+    </MenuPageLayout>
+  );
 };
 
 export default CourseDetails;

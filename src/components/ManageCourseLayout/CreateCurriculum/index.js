@@ -54,6 +54,16 @@ const CreateCurriculum = () => {
 
   return (
     <div>
+      <div className='p-6 pt-0 border-b border-labelText mb-3 flex justify-between'>
+        <h1 className='text-2xl font-bold'>Curriculum</h1>
+        <Button
+          label='Save'
+          type='submit'
+          onClick={() => {}}
+          variant='contained'
+          className='bg-primary'
+        />
+      </div>
       <Alert severity='info' variant='outlined'>
         Here’s where you add course content—like lectures, course sections,
         assignments, and more. Click the button below to get started.
