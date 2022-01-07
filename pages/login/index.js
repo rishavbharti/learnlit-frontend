@@ -54,7 +54,6 @@ function Login() {
                   label='Email'
                   type='email'
                   placeholder='Email'
-                  variant='filled'
                   error={!!error}
                   helperText={error ? error.message : null}
                   required
@@ -82,7 +81,6 @@ function Login() {
                   label='Password'
                   type='password'
                   placeholder='Password'
-                  variant='filled'
                   required
                   error={!!error}
                   helperText={error ? error.message : null}
@@ -94,8 +92,7 @@ function Login() {
             <Button
               label='Sign In'
               type='submit'
-              variant='contained'
-              className='mt-5 bg-primary'
+              className='mt-5 '
               loading={loading}
             />
           </form>

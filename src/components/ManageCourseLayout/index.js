@@ -92,12 +92,6 @@ const ManageCourseLayout = () => {
     <div>
       <div className='bg-black text-white h-14 px-16 md:px-40 flex justify-between items-center'>
         <h2 className='text-lg font-bold'>{data?.title}</h2>
-        {/* <Button
-          label='Save'
-          onClick={() => {}}
-          variant='contained'
-          className='bg-primary'
-        /> */}
       </div>
       <div className='flex flex-col lg:flex-row gap-5 px-3 lg:px-12 lg:py-5'>
         <div className='grid grid-cols-2 sm:grid-cols-4 lg:w-1/6 lg:flex lg:flex-col justify-between gap-3 mt-5 lg:mt-14 h-max'>

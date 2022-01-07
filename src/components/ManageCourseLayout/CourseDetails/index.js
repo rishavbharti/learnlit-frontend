@@ -77,7 +77,6 @@ const CourseDetails = () => {
               label='Title'
               type='text'
               placeholder='Title'
-              variant='filled'
               error={!!error}
               helperText={error ? error.message : null}
               required
@@ -105,7 +104,6 @@ const CourseDetails = () => {
               label='Subtitle'
               type='text'
               placeholder='Subtitle'
-              variant='filled'
               error={!!error}
               helperText={error ? error.message : null}
               required

@@ -80,7 +80,6 @@ const LectureForm = () => {
               label='Title'
               type='text'
               placeholder='Title'
-              variant='filled'
               error={!!error}
               helperText={error ? error.message : null}
               required
@@ -121,7 +120,6 @@ const LectureForm = () => {
                 label='Duration'
                 type='time'
                 placeholder='duration'
-                variant='filled'
                 error={!!error}
                 helperText={error ? error.message : null}
                 {...field}
@@ -142,7 +140,6 @@ const LectureForm = () => {
               label='Embed URL'
               type='url'
               placeholder='https://example.com'
-              variant='filled'
               error={!!error}
               helperText={error ? error.message : null}
               required
@@ -155,8 +152,7 @@ const LectureForm = () => {
 
       <Button
         label={isEditMode ? 'Update' : 'Add'}
-        className='bg-primary w-min ml-auto'
-        variant='contained'
+        className='w-min ml-auto'
         onClick={handleSubmit((data) => {
           isEditMode
             ? dispatch(editLecture({ data }))

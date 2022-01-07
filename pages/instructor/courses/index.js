@@ -9,7 +9,7 @@ import InstructorPageLayout from 'src/components/InstructorPageLayout';
 import CreateCourseDialog from './component/CreateCourseDialog';
 
 import { openDialog } from 'redux/slice/dialog';
-import { getTaughtCourses } from 'redux/slice/course';
+import { getPostedCourses } from 'redux/slice/course';
 
 import OnlineLearning from 'public/assets/online_learning.svg';
 import CourseCard from 'src/components/CourseCard/index.js';
@@ -20,7 +20,7 @@ const Courses = () => {
   const { loading, error, courses } = useSelector((state) => state.courses);
 
   useEffect(() => {
-    dispatch(getTaughtCourses());
+    dispatch(getPostedCourses());
   }, [dispatch]);
 
   const handleCreateCourseClick = () => {
@@ -80,8 +80,6 @@ const Courses = () => {
         <h1 className='text-2xl font-medium'>Courses</h1>
         <Button
           label='Create Course'
-          variant='contained'
-          className='bg-primary normal-case'
           startIcon={<AddIcon />}
           onClick={handleCreateCourseClick}
         />

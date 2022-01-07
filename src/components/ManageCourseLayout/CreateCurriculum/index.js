@@ -33,12 +33,7 @@ const CreateCurriculum = () => {
               ? 'Start by creating the First Chapter'
               : 'Expand the Curriculum'}
           </p>
-          <Button
-            label='Add new Chapter'
-            className='bg-primary'
-            variant='contained'
-            onClick={showChapterForm}
-          />
+          <Button label='Add new Chapter' onClick={showChapterForm} />
         </CenterAligned>
       );
     }
@@ -56,13 +51,7 @@ const CreateCurriculum = () => {
     <div>
       <div className='p-6 pt-0 border-b border-labelText mb-3 flex justify-between'>
         <h1 className='text-2xl font-bold'>Curriculum</h1>
-        <Button
-          label='Save'
-          type='submit'
-          onClick={() => {}}
-          variant='contained'
-          className='bg-primary'
-        />
+        <Button label='Save' type='submit' onClick={() => {}} />
       </div>
       <Alert severity='info' variant='outlined'>
         Here’s where you add course content—like lectures, course sections,
@@ -82,7 +71,8 @@ const CreateCurriculum = () => {
           <div className='bg-tertiaryBg p-2 sticky'>
             <Button
               label='Add new Chapter'
-              className='text-lg normal-case rounded-none bg-tertiaryBg'
+              variant='transparent'
+              className='text-lg normal-case'
               startIcon={<AddCircleOutlineOutlinedIcon />}
               onClick={showChapterForm}
             />

@@ -158,7 +158,8 @@ export default function CurriculumList() {
         </Accordion>
         <Button
           label='Add Chapter Item'
-          className='w-full normal-case'
+          variant='transparent'
+          className='w-full'
           startIcon={<AddIcon />}
           onClick={handleAddChapterItem}
         />

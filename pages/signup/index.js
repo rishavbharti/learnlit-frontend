@@ -55,7 +55,6 @@ function Signup() {
                   label='Name'
                   type='name'
                   placeholder='Name'
-                  variant='filled'
                   error={!!error}
                   helperText={error ? error.message : null}
                   required
@@ -75,7 +74,6 @@ function Signup() {
                   label='Email'
                   type='email'
                   placeholder='Email'
-                  variant='filled'
                   error={!!error}
                   helperText={error ? error.message : null}
                   required
@@ -103,7 +101,6 @@ function Signup() {
                   label='Password'
                   type='password'
                   placeholder='Password'
-                  variant='filled'
                   required
                   error={!!error}
                   helperText={error ? error.message : null}
@@ -115,8 +112,7 @@ function Signup() {
             <Button
               label='Sign Up'
               type='submit'
-              variant='contained'
-              className='mt-5 bg-primary'
+              className='mt-5'
               loading={loading}
             />
           </form>

@@ -32,7 +32,7 @@ export default function DialogBox(props) {
         {typeof renderContent === 'function' && renderContent()}
       </DialogContent>
       <DialogActions className='px-5 pb-5'>
-        <Button onClick={handleClose} label='Cancel' />
+        <Button onClick={handleClose} label='Cancel' variant='outlined' />
         {typeof renderAction === 'function' && renderAction()}
       </DialogActions>
     </Dialog>

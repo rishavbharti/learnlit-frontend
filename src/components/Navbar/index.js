@@ -165,7 +165,7 @@ export default function Navbar() {
           </Link>
 
           <Link href='/signup' passHref>
-            <Button label='Sign Up' variant='contained' />
+            <Button label='Sign Up' />
           </Link>
         </div>
       );

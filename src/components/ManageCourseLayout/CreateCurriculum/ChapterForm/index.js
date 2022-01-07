@@ -68,7 +68,6 @@ const ChapterForm = () => {
               label='Title'
               type='text'
               placeholder='Title'
-              variant='filled'
               error={!!error}
               helperText={error ? error.message : null}
               required
@@ -86,7 +85,6 @@ const ChapterForm = () => {
               label='Duration'
               type='time'
               placeholder='duration'
-              variant='filled'
               error={!!error}
               helperText={error ? error.message : null}
               {...field}
@@ -98,8 +96,7 @@ const ChapterForm = () => {
 
       <Button
         label={isEditMode ? 'Update' : 'Add'}
-        className='bg-primary w-min ml-auto'
-        variant='contained'
+        className='w-min ml-auto'
         onClick={handleSubmit((data) => {
           isEditMode
             ? dispatch(editChapter({ data }))

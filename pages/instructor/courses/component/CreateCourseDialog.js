@@ -51,8 +51,6 @@ const CreateCourseDialog = () => {
         type='submit'
         onClick={handleSubmit(onSubmit)}
         label='Create'
-        variant='contained'
-        className='bg-primary'
         loading={loading}
       />
     );
@@ -91,7 +89,6 @@ const CreateCourseDialog = () => {
                 label='Title'
                 type='text'
                 placeholder='Title'
-                variant='filled'
                 error={!!error}
                 helperText={error ? error.message : null}
                 required

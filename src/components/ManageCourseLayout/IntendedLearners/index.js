@@ -112,7 +112,8 @@ const IntendedLearners = () => {
           </ul>
           <Button
             label='Add more to your response'
-            className='text-md normal-case rounded-none mt-5'
+            className='text-md mt-5'
+            variant='transparent'
             startIcon={<AddIcon />}
             onClick={() => {
               highlightAppend({ points: '' });
@@ -174,7 +175,8 @@ const IntendedLearners = () => {
           </ul>
           <Button
             label='Add more to your response'
-            className='text-md normal-case rounded-none mt-5'
+            className='text-md mt-5'
+            variant='transparent'
             startIcon={<AddIcon />}
             onClick={() => {
               prerequisiteAppend({ points: '' });
@@ -233,7 +235,8 @@ const IntendedLearners = () => {
           </ul>
           <Button
             label='Add more to your response'
-            className='text-md normal-case rounded-none mt-5'
+            className='text-md mt-5'
+            variant='transparent'
             startIcon={<AddIcon />}
             onClick={() => {
               targetAudienceAppend({ points: '' });
