@@ -6,14 +6,14 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import Button from 'src/components/Button';
 import InstructorPageLayout from 'src/components/InstructorPageLayout';
+import CourseCard from 'src/components/CourseCard';
+import CenterAligned from 'src/components/CenterAligned';
 import CreateCourseDialog from './component/CreateCourseDialog';
 
 import { openDialog } from 'redux/slice/dialog';
 import { getPostedCourses } from 'redux/slice/course';
 
 import OnlineLearning from 'public/assets/online_learning.svg';
-import CourseCard from 'src/components/CourseCard/index.js';
-import CenterAligned from 'src/components/CenterAligned/index.js';
 
 const Courses = () => {
   const dispatch = useDispatch();

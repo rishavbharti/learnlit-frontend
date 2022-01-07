@@ -8,6 +8,7 @@ const initialState = {
   error: false,
   success: false,
   errorMessage: null,
+  instructors: [],
   profile: null,
 };
 
@@ -31,6 +32,36 @@ export const getInstructorProfile = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${API}/instructor/${id}`);
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data.errorMessage);
+    }
+  }
+);
+
+export const getAddedInstructors = createAsyncThunk(
+  'instructor/getAddedInstructors',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API}/added-instructors`);
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data.errorMessage);
+    }
+  }
+);
+
+export const addInstructor = createAsyncThunk(
+  'instructor/addInstructor',
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${API}/instructor/add`, { ...data });
       return response.data;
     } catch (error) {
       if (!error.response) {
@@ -76,6 +107,40 @@ export const instructorSlice = createSlice({
         state.profile = action.payload;
       })
       .addCase(getInstructorProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = true;
+        state.errorMessage = action.payload;
+      })
+
+      .addCase(addInstructor.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addInstructor.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = false;
+        state.errorMessage = '';
+
+        state.profile = action.payload;
+      })
+      .addCase(addInstructor.rejected, (state, action) => {
+        state.loading = false;
+        state.error = true;
+        state.errorMessage = action.payload;
+      })
+
+      .addCase(getAddedInstructors.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAddedInstructors.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = false;
+        state.errorMessage = '';
+
+        state.instructors = action.payload;
+      })
+      .addCase(getAddedInstructors.rejected, (state, action) => {
         state.loading = false;
         state.error = true;
         state.errorMessage = action.payload;

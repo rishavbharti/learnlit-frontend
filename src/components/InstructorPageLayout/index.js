@@ -13,6 +13,7 @@ import Divider from '@mui/material/Divider';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
+import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ListItemButton from '@mui/material/ListItemButton';
 
@@ -114,6 +115,11 @@ export default function InstructorPageLayout(props) {
       label: 'Settings',
       path: '/instructor/settings',
     },
+    {
+      icon: PeopleOutlinedIcon,
+      label: 'Instructors',
+      path: '/instructor/team',
+    },
   ];
 
   return (
@@ -143,7 +149,7 @@ export default function InstructorPageLayout(props) {
             <ListItemButton
               key={item.label}
               onClick={() => handleMenuClick(item.path)}
-              selected={router.route === item.path}
+              selected={router.route.includes(item.path)}
             >
               <ListItemIcon>
                 <item.icon />
