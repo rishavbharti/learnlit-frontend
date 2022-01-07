@@ -8,7 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import Input from 'src/components/Input';
 import Button from 'src/components/Button';
-import MenuPageLayout from '../MenuPageLayout';
+import FormPageLayout from 'src/components/FormPageLayout';
 
 const IntendedLearners = () => {
   const dispatch = useDispatch();
@@ -248,7 +248,7 @@ const IntendedLearners = () => {
   };
 
   return (
-    <MenuPageLayout
+    <FormPageLayout
       title='Intended learners'
       handleSave={handleSubmit(onSubmit)}
       containerClass='flex flex-col gap-8'
@@ -260,7 +260,7 @@ const IntendedLearners = () => {
         them.
       </p>
       {renderForm()}
-    </MenuPageLayout>
+    </FormPageLayout>
   );
 };
 

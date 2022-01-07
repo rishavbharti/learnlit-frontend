@@ -9,7 +9,6 @@ import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlin
 import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 
-import Button from 'src/components/Button';
 import CenterAligned from '../CenterAligned';
 import CreateCurriculum from './CreateCurriculum';
 import CourseDetails from './CourseDetails';

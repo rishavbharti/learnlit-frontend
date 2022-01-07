@@ -10,7 +10,7 @@ import DropdownInput from 'src/components/DropdownInput';
 import { getCategories } from 'redux/slice/courseCategories';
 
 import { languages } from 'src/data/languages';
-import MenuPageLayout from '../MenuPageLayout';
+import FormPageLayout from 'src/components/FormPageLayout';
 
 const CourseDetails = () => {
   const dispatch = useDispatch();
@@ -239,9 +239,9 @@ const CourseDetails = () => {
   };
 
   return (
-    <MenuPageLayout title='Course Details' handleSave={handleSubmit(onSubmit)}>
+    <FormPageLayout title='Course Details' handleSave={handleSubmit(onSubmit)}>
       {renderForm()}
-    </MenuPageLayout>
+    </FormPageLayout>
   );
 };
 
