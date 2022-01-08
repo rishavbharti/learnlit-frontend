@@ -11,9 +11,14 @@ import { getCategories } from 'redux/slice/courseCategories';
 
 import { languages } from 'src/data/languages';
 import FormPageLayout from 'src/components/FormPageLayout';
+import { updateCourse } from 'redux/slice/course';
 
 const CourseDetails = () => {
   const dispatch = useDispatch();
+  const {
+    data,
+    update: { loading },
+  } = useSelector((state) => state.courses.course);
   const { categories } = useSelector((state) => state.courseCategories);
   const [category, setCategory] = useState('');
   const [subCategoriesList, setSubCategoriesList] = useState([]);
@@ -47,17 +52,26 @@ const CourseDetails = () => {
     setSubCategoriesList(subCategory);
   }, [category, categories]);
 
-  const onSubmit = (data) => {
-    console.log('data ', data);
+  useEffect(() => {
+    setValue('details', {
+      title: data?.title,
+      subtitle: data?.subtitle,
+      description: data?.description,
+      language: data?.language,
+      level: data?.level,
+      category: data?.category,
+      subCategory: data?.subCategory,
+    });
+    setCategory(data?.category);
+  }, [data, setValue]);
+
+  const onSubmit = (formData) => {
+    dispatch(updateCourse({ ...formData.details, _id: data._id }));
   };
 
   const renderForm = () => {
     return (
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        // onSubmit={(e) => e.preventDefault()}
-        className='flex flex-col gap-5'
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-5'>
         <Controller
           name='details.title'
           control={control}
@@ -239,7 +253,11 @@ const CourseDetails = () => {
   };
 
   return (
-    <FormPageLayout title='Course Details' handleSave={handleSubmit(onSubmit)}>
+    <FormPageLayout
+      title='Course Details'
+      handleSave={handleSubmit(onSubmit)}
+      loading={loading}
+    >
       {renderForm()}
     </FormPageLayout>
   );

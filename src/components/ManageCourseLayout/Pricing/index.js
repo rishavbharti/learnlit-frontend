@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -6,19 +6,22 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 
 import Input from 'src/components/Input';
 import DropdownInput from 'src/components/DropdownInput';
 
-import MenuPageLayout from '../MenuPageLayout';
+import FormPageLayout from 'src/components/FormPageLayout';
 
 const Pricing = () => {
   const dispatch = useDispatch();
 
   const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
-      details: {},
+      details: {
+        pricing: 'Free',
+        currency: 'INR',
+        price: '',
+      },
     },
   });
 
@@ -37,18 +40,75 @@ const Pricing = () => {
           How do you intend to offer your course? Select the monetization
           option.
         </p>
-        <RadioGroup row aria-label='pricing' name='row-radio-buttons-group'>
-          <FormControlLabel value='free' control={<Radio />} label='Free' />
-          <FormControlLabel value='paid' control={<Radio />} label='Paid' />
-        </RadioGroup>
+        <FormControl component='fieldset'>
+          <Controller
+            rules={{ required: true }}
+            control={control}
+            name='details.pricing'
+            render={({ field }) => (
+              <RadioGroup {...field} row defaultValue='Free' name='pricing'>
+                <FormControlLabel
+                  value='Free'
+                  control={<Radio />}
+                  label='Free'
+                />
+                <FormControlLabel
+                  value='Paid'
+                  control={<Radio />}
+                  label='Paid'
+                />
+              </RadioGroup>
+            )}
+          />
+        </FormControl>
+
+        <div className='flex gap-5'>
+          <Controller
+            name='details.currency'
+            control={control}
+            rules={{
+              required: 'Currency is required.',
+            }}
+            render={({ field, fieldState: { error } }) => (
+              <DropdownInput
+                data={['INR', 'USD']}
+                error={!!error}
+                helperText={error ? error.message : null}
+                value={field.value}
+                handleChange={field.onChange}
+                valueExtractor={(datum) => datum}
+                labelExtractor={(datum) => datum}
+                containerClass='w-24 mt-3'
+              />
+            )}
+          />
+          <Controller
+            name='details.price'
+            control={control}
+            rules={{
+              required: 'Price is required.',
+            }}
+            render={({ field, fieldState: { error } }) => (
+              <Input
+                label='Price'
+                type='number'
+                placeholder='699'
+                error={!!error}
+                helperText={error ? error.message : null}
+                required
+                {...field}
+              />
+            )}
+          />
+        </div>
       </form>
     );
   };
 
   return (
-    <MenuPageLayout title='Pricing' handleSave={handleSubmit(onSubmit)}>
+    <FormPageLayout title='Pricing' handleSave={handleSubmit(onSubmit)}>
       {renderForm()}
-    </MenuPageLayout>
+    </FormPageLayout>
   );
 };
 

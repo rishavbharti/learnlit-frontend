@@ -84,6 +84,7 @@ const ChapterForm = () => {
             <Input
               label='Duration'
               type='time'
+              inputProps={{ step: 2 }}
               placeholder='duration'
               error={!!error}
               helperText={error ? error.message : null}

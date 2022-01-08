@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
+import Link from 'next/link';
 
 import CircularProgress from '@mui/material/CircularProgress';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
@@ -8,16 +9,21 @@ import TocOutlinedIcon from '@mui/icons-material/TocOutlined';
 import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
 import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import CenterAligned from '../CenterAligned';
 import CreateCurriculum from './CreateCurriculum';
 import CourseDetails from './CourseDetails';
 import IntendedLearners from './IntendedLearners';
 import Pricing from './Pricing';
+import Settings from './Settings';
 
 const ManageCourseLayout = () => {
   const router = useRouter();
-  const { loading, error, data } = useSelector((state) => state.courses.course);
+  const {
+    fetch: { loading, error },
+    data,
+  } = useSelector((state) => state.courses.course);
 
   const activePath = router.query.m;
 
@@ -82,15 +88,24 @@ const ManageCourseLayout = () => {
         return <IntendedLearners />;
       case 'p':
         return <Pricing />;
+      case 's':
+        return <Settings />;
       default:
-        return null;
+        return <CourseDetails />;
     }
   };
 
   return (
     <div>
       <div className='bg-black text-white h-14 px-16 md:px-40 flex justify-between items-center'>
-        <h2 className='text-lg font-bold'>{data?.title}</h2>
+        <div className='flex items-center gap-24'>
+          <Link href='/instructor/courses'>
+            <a>
+              <ArrowBackIcon className='cursor-ponter' />
+            </a>
+          </Link>
+          <h2 className='text-lg font-bold'>{data?.title}</h2>
+        </div>
       </div>
       <div className='flex flex-col lg:flex-row gap-5 px-3 lg:px-12 lg:py-5'>
         <div className='grid grid-cols-2 sm:grid-cols-4 lg:w-1/6 lg:flex lg:flex-col justify-between gap-3 mt-5 lg:mt-14 h-max'>
