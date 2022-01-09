@@ -13,13 +13,7 @@ const ChapterForm = () => {
     (state) => state.courses.course
   );
 
-  const {
-    control,
-    handleSubmit,
-    reset,
-    setValue,
-    // formState: { errors },
-  } = useForm({
+  const { control, handleSubmit, reset, setValue } = useForm({
     defaultValues: {
       chapterTitle: '',
       duration: '',
@@ -45,7 +39,6 @@ const ChapterForm = () => {
         {isEditMode ? 'Edit Chapter' : 'Add new Chapter'}
       </h2>
       <form
-        // onSubmit={handleSubmit(onSubmit)}
         onSubmit={(e) => e.preventDefault()}
         className='flex flex-col sm:flex-row gap-2'
       >

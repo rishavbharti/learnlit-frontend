@@ -10,13 +10,24 @@ import CurriculumList from 'src/components/ManageCourseLayout/CreateCurriculum/C
 import ChapterForm from './ChapterForm';
 import LectureForm from './LectureForm';
 
-import { setIsEditMode, setRenderChapterForm } from 'redux/slice/course';
+import {
+  setIsEditMode,
+  setRenderChapterForm,
+  updateCourse,
+} from 'redux/slice/course';
 
 const CreateCurriculum = () => {
   const dispatch = useDispatch();
-  const { renderChapterForm, renderLectureForm, data } = useSelector(
-    (state) => state.courses.course
-  );
+  const {
+    renderChapterForm,
+    renderLectureForm,
+    data,
+    update: { loading },
+  } = useSelector((state) => state.courses.course);
+
+  const onSubmit = () => {
+    dispatch(updateCourse({ curriculum: data.curriculum, _id: data._id }));
+  };
 
   const showChapterForm = () => {
     dispatch(setIsEditMode(false));
@@ -51,7 +62,12 @@ const CreateCurriculum = () => {
     <div>
       <div className='p-6 pt-0 border-b border-labelText mb-3 flex justify-between'>
         <h1 className='text-2xl font-bold'>Curriculum</h1>
-        <Button label='Save' type='submit' onClick={() => {}} />
+        <Button
+          label='Save'
+          type='submit'
+          onClick={onSubmit}
+          loading={loading}
+        />
       </div>
       <Alert severity='info' variant='outlined'>
         Here’s where you add course content—like lectures, course sections,

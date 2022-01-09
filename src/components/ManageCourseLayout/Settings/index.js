@@ -6,12 +6,17 @@ import Switch from '@mui/material/Switch';
 
 import Input from 'src/components/Input';
 import DropdownInput from 'src/components/DropdownInput';
-
 import FormPageLayout from 'src/components/FormPageLayout';
+
 import { getAddedInstructors } from 'redux/slice/instructor';
+import { updateCourse } from 'redux/slice/course';
 
 const Settings = () => {
   const dispatch = useDispatch();
+  const {
+    data,
+    update: { updating },
+  } = useSelector((state) => state.courses.course);
   const { loading, instructors } = useSelector((state) => state.instructor);
 
   useEffect(() => {
@@ -31,8 +36,23 @@ const Settings = () => {
     },
   });
 
-  const onSubmit = (data) => {
-    console.log('data ', data);
+  useEffect(() => {
+    setValue('details', {
+      instructors: data?.instructors[0],
+      duration: data?.duration,
+      hidePlayerBranding: data?.hidePlayerBranding,
+      published: data?.published,
+    });
+  }, [data, setValue]);
+
+  const onSubmit = (formData) => {
+    dispatch(
+      updateCourse({
+        ...formData.details,
+        instructors: [formData.details.instructors],
+        _id: data._id,
+      })
+    );
   };
 
   const renderField = (label, Component) => {
@@ -46,11 +66,7 @@ const Settings = () => {
 
   const renderForm = () => {
     return (
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        // onSubmit={(e) => e.preventDefault()}
-        className='flex flex-col gap-8'
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-8'>
         {renderField(
           'Instructor',
           <Controller
@@ -126,7 +142,11 @@ const Settings = () => {
   };
 
   return (
-    <FormPageLayout title='Settings' handleSave={handleSubmit(onSubmit)}>
+    <FormPageLayout
+      title='Settings'
+      handleSave={handleSubmit(onSubmit)}
+      loading={updating}
+    >
       {renderForm()}
     </FormPageLayout>
   );

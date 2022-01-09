@@ -9,13 +9,18 @@ import FormControl from '@mui/material/FormControl';
 
 import Input from 'src/components/Input';
 import DropdownInput from 'src/components/DropdownInput';
-
 import FormPageLayout from 'src/components/FormPageLayout';
+
+import { updateCourse } from 'redux/slice/course';
 
 const Pricing = () => {
   const dispatch = useDispatch();
+  const {
+    data,
+    update: { loading },
+  } = useSelector((state) => state.courses.course);
 
-  const { control, handleSubmit, setValue } = useForm({
+  const { control, watch, handleSubmit, setValue } = useForm({
     defaultValues: {
       details: {
         pricing: 'Free',
@@ -25,17 +30,30 @@ const Pricing = () => {
     },
   });
 
-  const onSubmit = (data) => {
-    console.log('data ', data);
+  const watchPricing = watch('details.pricing');
+
+  useEffect(() => {
+    setValue('details', {
+      pricing: data?.pricing,
+      currency: data?.currency,
+      price: data?.price,
+    });
+  }, [data, setValue]);
+
+  const onSubmit = (formData) => {
+    dispatch(
+      updateCourse({
+        ...formData.details,
+        price:
+          formData.details.pricing === 'Free' ? '' : formData.details?.price,
+        _id: data._id,
+      })
+    );
   };
 
   const renderForm = () => {
     return (
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        // onSubmit={(e) => e.preventDefault()}
-        className='flex flex-col gap-5'
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-5'>
         <p>
           How do you intend to offer your course? Select the monetization
           option.
@@ -62,51 +80,57 @@ const Pricing = () => {
           />
         </FormControl>
 
-        <div className='flex gap-5'>
-          <Controller
-            name='details.currency'
-            control={control}
-            rules={{
-              required: 'Currency is required.',
-            }}
-            render={({ field, fieldState: { error } }) => (
-              <DropdownInput
-                data={['INR', 'USD']}
-                error={!!error}
-                helperText={error ? error.message : null}
-                value={field.value}
-                handleChange={field.onChange}
-                valueExtractor={(datum) => datum}
-                labelExtractor={(datum) => datum}
-                containerClass='w-24 mt-3'
-              />
-            )}
-          />
-          <Controller
-            name='details.price'
-            control={control}
-            rules={{
-              required: 'Price is required.',
-            }}
-            render={({ field, fieldState: { error } }) => (
-              <Input
-                label='Price'
-                type='number'
-                placeholder='699'
-                error={!!error}
-                helperText={error ? error.message : null}
-                required
-                {...field}
-              />
-            )}
-          />
-        </div>
+        {watchPricing === 'Paid' && (
+          <div className='flex gap-5'>
+            <Controller
+              name='details.currency'
+              control={control}
+              rules={{
+                required: 'Currency is required.',
+              }}
+              render={({ field, fieldState: { error } }) => (
+                <DropdownInput
+                  data={['INR', 'USD']}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  value={field.value}
+                  handleChange={field.onChange}
+                  valueExtractor={(datum) => datum}
+                  labelExtractor={(datum) => datum}
+                  containerClass='w-24 mt-3'
+                />
+              )}
+            />
+            <Controller
+              name='details.price'
+              control={control}
+              rules={{
+                required: 'Price is required.',
+              }}
+              render={({ field, fieldState: { error } }) => (
+                <Input
+                  label='Price'
+                  type='number'
+                  placeholder='699'
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                  required
+                  {...field}
+                />
+              )}
+            />
+          </div>
+        )}
       </form>
     );
   };
 
   return (
-    <FormPageLayout title='Pricing' handleSave={handleSubmit(onSubmit)}>
+    <FormPageLayout
+      title='Pricing'
+      handleSave={handleSubmit(onSubmit)}
+      loading={loading}
+    >
       {renderForm()}
     </FormPageLayout>
   );

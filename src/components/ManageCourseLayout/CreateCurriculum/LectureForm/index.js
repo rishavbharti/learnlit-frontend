@@ -14,13 +14,7 @@ const LectureForm = () => {
     (state) => state.courses.course
   );
 
-  const {
-    control,
-    handleSubmit,
-    reset,
-    setValue,
-    // formState: { isDirty, touchedFields, errors },
-  } = useForm({
+  const { control, handleSubmit, reset, setValue } = useForm({
     defaultValues: {
       title: '',
       class: '',
@@ -57,7 +51,6 @@ const LectureForm = () => {
       </h2>
 
       <form
-        // onSubmit={handleSubmit(onSubmit)}
         onSubmit={(e) => e.preventDefault()}
         className='flex flex-col gap-2'
       >
