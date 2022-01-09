@@ -9,9 +9,15 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Input from 'src/components/Input';
 import Button from 'src/components/Button';
 import FormPageLayout from 'src/components/FormPageLayout';
+import { updateCourse } from 'redux/slice/course';
 
 const IntendedLearners = () => {
   const dispatch = useDispatch();
+  const {
+    data,
+    fetch: { loading: fetching },
+    update: { loading },
+  } = useSelector((state) => state.courses.course);
 
   const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
@@ -50,17 +56,37 @@ const IntendedLearners = () => {
     name: 'details.targetAudience',
   });
 
-  const onSubmit = (data) => {
-    console.log('data ', data);
+  useEffect(() => {
+    if (!fetching) {
+      let high, pre, aud;
+      if (data?.highlights) {
+        high = data.highlights.map((h) => ({ points: h.points }));
+      }
+      if (data?.prerequisites) {
+        pre = data.prerequisites.map((p) => ({ points: p.points }));
+      }
+      if (data?.targetAudience) {
+        aud = data.targetAudience.map((a) => ({ points: a.points }));
+      }
+      setValue('details', {
+        highlights: high || [{ points: '' }],
+        prerequisites: pre || [{ points: '' }],
+        targetAudience: aud || [{ points: '' }],
+      });
+      highlightAppend({ points: '' });
+      prerequisiteAppend({ points: '' });
+      targetAudienceAppend({ points: '' });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetching, data, setValue]);
+
+  const onSubmit = (formData) => {
+    dispatch(updateCourse({ ...formData.details, _id: data._id }));
   };
 
   const renderForm = () => {
     return (
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        // onSubmit={(e) => e.preventDefault()}
-        className='flex flex-col gap-8'
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-8'>
         <div>
           <h3 className='font-medium'>
             What will students learn in your course?
@@ -79,8 +105,8 @@ const IntendedLearners = () => {
                     rules={{
                       required: 'Highlight is required.',
                       minLength: {
-                        value: 10,
-                        message: 'Highlight must be at least 10 characters.',
+                        value: 5,
+                        message: 'Highlight must be at least 5 characters.',
                       },
                       maxLength: {
                         value: 160,
@@ -142,8 +168,8 @@ const IntendedLearners = () => {
                     rules={{
                       required: 'Prerequisite is required.',
                       minLength: {
-                        value: 10,
-                        message: 'Prerequisite must be at least 10 characters.',
+                        value: 5,
+                        message: 'Prerequisite must be at least 5 characters.',
                       },
                       maxLength: {
                         value: 160,
@@ -202,8 +228,8 @@ const IntendedLearners = () => {
                     rules={{
                       required: 'This field is required.',
                       minLength: {
-                        value: 10,
-                        message: 'Must be at least 10 characters.',
+                        value: 5,
+                        message: 'Must be at least 5 characters.',
                       },
                       maxLength: {
                         value: 160,
@@ -251,6 +277,7 @@ const IntendedLearners = () => {
     <FormPageLayout
       title='Intended learners'
       handleSave={handleSubmit(onSubmit)}
+      loading={loading}
       containerClass='flex flex-col gap-8'
     >
       <p>

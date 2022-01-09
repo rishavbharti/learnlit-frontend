@@ -105,12 +105,12 @@ const CourseDetails = () => {
           rules={{
             required: 'Subtitle is required.',
             minLength: {
-              value: 3,
+              value: 10,
               message: 'Subtitle must be at least 10 characters.',
             },
             maxLength: {
-              value: 80,
-              message: 'Subtitle must be maximum 120 characters.',
+              value: 200,
+              message: 'Subtitle must be maximum 200 characters.',
             },
           }}
           render={({ field, fieldState: { error } }) => (
