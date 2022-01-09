@@ -100,7 +100,7 @@ const LectureForm = () => {
                 handleChange={field.onChange}
                 valueExtractor={(datum) => datum.title}
                 labelExtractor={(datum) => datum.title}
-                containerClass='w-1/2'
+                containerClass='w-1/2 mt-3'
               />
             )}
           />
