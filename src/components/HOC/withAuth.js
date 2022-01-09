@@ -21,8 +21,12 @@ export default function withAuth(WrappedComponent, location = '/login') {
       return <WrappedComponent {...props} />;
     }
 
-    router.push({ pathname: location });
-    return <></>;
+    if (isBrowser() && !isAuthenticated) {
+      router.push({ pathname: location });
+      return <></>;
+    }
+
+    return null;
   };
 
   return ConditionalRedirectWrapper;

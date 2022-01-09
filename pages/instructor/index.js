@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
+import withAuth from 'src/components/HOC/withAuth';
+
 const Instructor = () => {
   const router = useRouter();
 
@@ -11,4 +13,4 @@ const Instructor = () => {
   return null;
 };
 
-export default Instructor;
+export default withAuth(Instructor);

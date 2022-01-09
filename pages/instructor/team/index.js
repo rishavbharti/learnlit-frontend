@@ -5,6 +5,8 @@ import { useRouter } from 'next/router';
 import AddIcon from '@mui/icons-material/Add';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import withAuth from 'src/components/HOC/withAuth';
+
 import Button from 'src/components/Button';
 import InstructorPageLayout from 'src/components/InstructorPageLayout';
 import CenterAligned from 'src/components/CenterAligned';
@@ -26,11 +28,6 @@ const Team = () => {
   }, [dispatch]);
 
   const renderTeam = () => {
-    // return (
-    //   <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 sm:gap-10'>
-    //     {instructors.map((instructor, index) => instructor.name)}
-    //   </div>
-    // );
     return <InstructorTable data={instructors} />;
   };
 
@@ -81,4 +78,4 @@ const Team = () => {
   );
 };
 
-export default Team;
+export default withAuth(Team);

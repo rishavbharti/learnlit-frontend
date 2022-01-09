@@ -4,6 +4,8 @@ import Image from 'next/image';
 import AddIcon from '@mui/icons-material/Add';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import withAuth from 'src/components/HOC/withAuth';
+
 import Button from 'src/components/Button';
 import InstructorPageLayout from 'src/components/InstructorPageLayout';
 import CourseCard from 'src/components/CourseCard';
@@ -90,4 +92,4 @@ const Courses = () => {
   );
 };
 
-export default Courses;
+export default withAuth(Courses);
