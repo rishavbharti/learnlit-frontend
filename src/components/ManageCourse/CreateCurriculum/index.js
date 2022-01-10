@@ -6,7 +6,7 @@ import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOu
 
 import CenterAligned from 'src/components/CenterAligned';
 import Button from 'src/components/Button';
-import CurriculumList from 'src/components/ManageCourseLayout/CreateCurriculum/CurriculumList';
+import CurriculumList from 'src/components/ManageCourse/CreateCurriculum/CurriculumList';
 import ChapterForm from './ChapterForm';
 import LectureForm from './LectureForm';
 

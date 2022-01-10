@@ -81,7 +81,7 @@ const Pricing = () => {
         </FormControl>
 
         {watchPricing === 'Paid' && (
-          <div className='flex gap-5'>
+          <div className='flex items-center gap-5'>
             <Controller
               name='details.currency'
               control={control}
@@ -97,7 +97,7 @@ const Pricing = () => {
                   handleChange={field.onChange}
                   valueExtractor={(datum) => datum}
                   labelExtractor={(datum) => datum}
-                  containerClass='w-24 mt-3'
+                  containerClass='w-24'
                 />
               )}
             />

@@ -18,7 +18,7 @@ import IntendedLearners from './IntendedLearners';
 import Pricing from './Pricing';
 import Settings from './Settings';
 
-const ManageCourseLayout = () => {
+const ManageCourse = () => {
   const router = useRouter();
   const {
     fetch: { loading, error },
@@ -128,4 +128,4 @@ const ManageCourseLayout = () => {
   );
 };
 
-export default ManageCourseLayout;
+export default ManageCourse;

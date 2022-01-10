@@ -33,6 +33,7 @@ const CourseDetails = () => {
         level: '',
         category: '',
         subCategory: '',
+        previewMedia: '',
       },
     },
   });
@@ -61,6 +62,7 @@ const CourseDetails = () => {
       level: data?.level,
       category: data?.category,
       subCategory: data?.subCategory,
+      previewMedia: data?.previewMedia,
     });
     setCategory(data?.category);
   }, [data, setValue]);
@@ -248,6 +250,26 @@ const CourseDetails = () => {
             />
           </div>
         </div>
+
+        <Controller
+          name='details.previewMedia'
+          control={control}
+          rules={{
+            required: 'This field is required.',
+          }}
+          render={({ field, fieldState: { error } }) => (
+            <Input
+              label='Promotional video URL'
+              type='url'
+              placeholder='https://www.youtube.com/watch?v=VajdUkDGc-E'
+              error={!!error}
+              helperText={error ? error.message : null}
+              required
+              {...field}
+              className='w-full'
+            />
+          )}
+        />
       </form>
     );
   };
@@ -257,6 +279,7 @@ const CourseDetails = () => {
       title='Course Details'
       handleSave={handleSubmit(onSubmit)}
       loading={loading}
+      containerClass='pb-10'
     >
       {renderForm()}
     </FormPageLayout>

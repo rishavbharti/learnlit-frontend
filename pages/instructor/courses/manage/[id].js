@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 
 import withAuth from 'src/components/HOC/withAuth';
-import ManageCourseLayout from 'src/components/ManageCourseLayout';
+import ManageCourse from 'src/components/ManageCourse';
 import { fetchCourse } from 'redux/slice/course';
 
 const EditCourse = () => {
@@ -14,7 +14,7 @@ const EditCourse = () => {
     router.query.id && dispatch(fetchCourse(router.query.id));
   }, [dispatch, router.query.id]);
 
-  return <ManageCourseLayout />;
+  return <ManageCourse />;
 };
 
 export default withAuth(EditCourse);

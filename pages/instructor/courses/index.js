@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
 import AddIcon from '@mui/icons-material/Add';
@@ -18,6 +19,7 @@ import { getPostedCourses } from 'redux/slice/course';
 import OnlineLearning from 'public/assets/online_learning.svg';
 
 const Courses = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const { loading, error, courses } = useSelector((state) => state.courses);
 
@@ -29,11 +31,19 @@ const Courses = () => {
     dispatch(openDialog());
   };
 
+  const handleCourseClick = (course) =>
+    router.push(`/instructor/courses/manage/${course._id}?m=d`);
+
   const renderCourses = () => {
     return (
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 sm:gap-10'>
         {courses.map((course, index) => (
-          <CourseCard key={index} course={course} />
+          <CourseCard
+            key={index}
+            course={course}
+            handleClick={() => handleCourseClick(course)}
+            hoverText='Edit / manage course'
+          />
         ))}
       </div>
     );
