@@ -8,6 +8,13 @@ const initialState = {
   error: false,
   success: false,
   errorMessage: null,
+  allcourses: {
+    loading: false,
+    error: false,
+    success: false,
+    errorMessage: null,
+    data: [],
+  },
   courses: [],
 
   create: { loading: false, error: false, success: false, errorMessage: null },
@@ -29,6 +36,21 @@ const initialState = {
     data: null,
   },
 };
+
+export const getAllCourses = createAsyncThunk(
+  'courses/getAllCourses',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API}/all-courses`);
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data.errorMessage);
+    }
+  }
+);
 
 export const getPostedCourses = createAsyncThunk(
   'courses/getPostedCourses',
@@ -203,6 +225,23 @@ export const coursesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(getAllCourses.pending, (state) => {
+        state.allcourses.loading = true;
+      })
+      .addCase(getAllCourses.fulfilled, (state, action) => {
+        state.allcourses.loading = false;
+        state.allcourses.success = true;
+        state.allcourses.error = false;
+        state.allcourses.errorMessage = null;
+
+        state.allcourses.data = action.payload;
+      })
+      .addCase(getAllCourses.rejected, (state, action) => {
+        state.allcourses.loading = false;
+        state.allcourses.error = true;
+        state.allcourses.errorMessage = action.payload;
+      })
+
       .addCase(getPostedCourses.pending, (state) => {
         state.loading = true;
       })

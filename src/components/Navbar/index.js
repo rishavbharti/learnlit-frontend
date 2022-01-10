@@ -128,11 +128,9 @@ export default function Navbar() {
       return (
         <div className='hidden md:flex gap-8'>
           {(profile?.role.includes('Instructor') || instructorProfile) && (
-            <div className='hidden lg:block'>
-              <Link href='/instructor'>
-                <a>Instructor</a>
-              </Link>
-            </div>
+            <Link href='/instructor'>
+              <a>Instructor</a>
+            </Link>
           )}
 
           <Link href='/my-courses'>
@@ -177,7 +175,7 @@ export default function Navbar() {
       <AppBar position='static' color='body'>
         <Toolbar className='h-20 lg:px-24'>
           <Logo variant='header' />
-          <div className='hidden md:flex items-center'>
+          <div className='hidden md:flex w-1/2 items-center'>
             <Submenu />
             <Searchbar />
           </div>
