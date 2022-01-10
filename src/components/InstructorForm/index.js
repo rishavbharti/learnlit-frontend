@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import { stripHtml } from 'string-strip-html';
 
@@ -10,6 +10,7 @@ import { addInstructor } from 'redux/slice/instructor';
 
 const InstructorForm = () => {
   const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.instructor);
   const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
       details: {
@@ -213,6 +214,7 @@ const InstructorForm = () => {
     <FormPageLayout
       title='Add new Instructor'
       handleSave={handleSubmit(onSubmit)}
+      loading={loading}
     >
       {renderForm()}
     </FormPageLayout>
