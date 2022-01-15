@@ -1,0 +1,150 @@
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
+
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import LanguageIcon from '@mui/icons-material/Language';
+import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
+import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
+
+import Button from 'src/components/Button';
+import Layout from 'src/components/Layout';
+import Highlights from './components/Highlights';
+
+import { fetchCourse } from 'redux/slice/course';
+import { getCourseDuration } from 'src/utils';
+import CurriculumAccordion from 'src/components/Curriculum/CurriculumAccordion';
+import Points from './components/Points';
+import Description from './components/Description';
+
+const CourseLandingPage = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const {
+    fetch: { loading, error },
+    data: course,
+  } = useSelector((state) => state.courses.course);
+
+  const { slug } = router.query;
+
+  useEffect(() => {
+    slug && dispatch(fetchCourse({ slug }));
+  }, [dispatch, slug]);
+
+  const courseCTAs = () => {
+    return (
+      <Button
+        className='w-full py-3 font-bold'
+        label='Go to Course'
+        onClick={() => {}}
+      />
+    );
+  };
+
+  const renderHeader = () => {
+    return (
+      <div className='pt-8 pb-12 bg-headerBg text-secondaryText lg:h-80'>
+        <div className='flex justify-between w-11/12 xl:w-18/25 mx-auto'>
+          <div className='w-11/12 md:w-3/4 lg:w-61/100 mx-auto lg:m-0'>
+            <p className='flex items-center text-sm text-primaryLight my-3'>
+              {course?.category}{' '}
+              <NavigateNextIcon
+                fontSize='small'
+                className='text-secondaryText'
+              />
+              {course?.subCategory}
+            </p>
+            <div className='block lg:hidden'>
+              <iframe
+                width='650'
+                height='350'
+                src='https://www.youtube-nocookie.com/embed/62H1PEasNc0'
+                title='YouTube video player'
+                frameBorder='0'
+                allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+                allowFullScreen
+              ></iframe>
+            </div>
+            <div className='flex flex-col gap-2 my-5'>
+              <h1 className='text-3xl font-medium'>{course?.title}</h1>
+              <h1 className='text-lg'>{course?.subtitle}</h1>
+            </div>
+            <div className='text-sm'>
+              {/* <p>Created by </p> */}
+              <p className='flex items-center gap-2'>
+                <LanguageIcon fontSize='small' /> {course?.language}
+              </p>
+            </div>
+            <div className='mt-8 block lg:hidden'>{courseCTAs()}</div>
+          </div>
+          {renderSidebar()}
+        </div>
+      </div>
+    );
+  };
+
+  const renderSidebar = () => {
+    return (
+      <div className='hidden lg:block w-96 text-mainText'>
+        <iframe
+          width='385'
+          height='215'
+          src='https://www.youtube-nocookie.com/embed/62H1PEasNc0'
+          title='YouTube video player'
+          frameBorder='0'
+          allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+          allowFullScreen
+        ></iframe>
+        <div className='py-8 px-6 bg-bodyBg shadow-md'>
+          {courseCTAs()}
+          <div>
+            <p className='font-bold mt-8 mb-3'>This course includes:</p>
+            <div className='flex flex-col gap-3 text-sm'>
+              <p className='flex items-center gap-3'>
+                <OndemandVideoIcon fontSize='small' />
+                {getCourseDuration(course?.duration)} on-demand video
+              </p>
+              <p className='flex items-center gap-3'>
+                <AllInclusiveIcon fontSize='small' />
+                Full lifetime access
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderCourseContent = () => {
+    return (
+      <div>
+        <h3 className='font-bold text-2xl mb-4'>Course curriculum</h3>
+        <p className='mb-3 text-sm'>
+          {course?.curriculum.length} chapters &#8226; {course?.duration} total
+          duration
+        </p>
+        <CurriculumAccordion viewOnly />
+      </div>
+    );
+  };
+
+  return (
+    <Layout loading={loading || !course} error={error} containerClass='px-0'>
+      {renderHeader()}
+      <div className='flex justify-between py-10 w-11/12 xl:w-18/25 mx-auto'>
+        <div className='flex flex-col gap-14 w-11/12 md:w-3/4 lg:w-61/100 mx-auto lg:m-0'>
+          <Highlights highlights={course?.highlights} />
+          {renderCourseContent()}
+          <Points data={course?.prerequisites} title='Requirements' />
+          <Description description={course?.description} />
+          <Points
+            data={course?.targetAudience}
+            title='Who this course is for:'
+          />
+        </div>
+      </div>
+    </Layout>
+  );
+};
+
+export default CourseLandingPage;

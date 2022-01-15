@@ -18,3 +18,13 @@ a {
 * {
   box-sizing: border-box;
 }
+
+@layer base {
+  ol,
+  ul {
+    list-style: square;
+    list-style-type: disc;
+    margin: 1em 0;
+    padding-left: 2.5em;
+  }
+}

@@ -88,7 +88,7 @@ const CreateCurriculum = () => {
             <Button
               label='Add new Chapter'
               variant='transparent'
-              className='text-lg normal-case'
+              className='text-lg'
               startIcon={<AddCircleOutlineOutlinedIcon />}
               onClick={showChapterForm}
             />

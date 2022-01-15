@@ -16,9 +16,10 @@ export default function Button(props) {
       {...otherProps}
       disableElevation
       className={classnames(
+        'normal-case',
         {
           'bg-primary': props.variant === 'contained',
-          'normal-case rounded-none bg-inherit hover:bg-inherit text-primary':
+          'rounded-none bg-inherit hover:bg-inherit text-primary':
             props.variant === 'transparent',
         },
         props.className

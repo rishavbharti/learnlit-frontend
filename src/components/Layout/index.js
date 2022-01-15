@@ -1,14 +1,15 @@
+import classnames from 'classnames';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import Navbar from 'src/components/Navbar';
 import CenterAligned from 'src/components/CenterAligned';
 
 export default function Layout(props) {
-  const { loading, error } = props;
+  const { containerClass, loading, error } = props;
 
   if (loading) {
     return (
-      <CenterAligned>
+      <CenterAligned height='screen'>
         <CircularProgress />
       </CenterAligned>
     );
@@ -16,8 +17,8 @@ export default function Layout(props) {
 
   if (error) {
     return (
-      <CenterAligned>
-        <h3>Errr fetching courses</h3>
+      <CenterAligned height='screen'>
+        <h3>Error fetching courses</h3>
       </CenterAligned>
     );
   }
@@ -25,7 +26,14 @@ export default function Layout(props) {
   return (
     <>
       <Navbar />
-      <main className='xl:px-24 pb-10  '>{props.children}</main>
+      <main
+        className={classnames(
+          { 'xl:px-24 pb-10': !containerClass },
+          containerClass
+        )}
+      >
+        {props.children}
+      </main>
     </>
   );
 }

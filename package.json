@@ -22,6 +22,7 @@
     "@reduxjs/toolkit": "^1.6.2",
     "axios": "^0.24.0",
     "classnames": "^2.3.1",
+    "dompurify": "^2.3.4",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
     "html-to-draftjs": "^1.5.0",
@@ -36,6 +37,7 @@
     "string-strip-html": "^9.1.4"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.0",
     "autoprefixer": "^10.4.0",
     "eslint": "7.32.0",
     "eslint-config-next": "12.0.2",

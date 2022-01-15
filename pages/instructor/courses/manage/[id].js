@@ -11,7 +11,7 @@ const EditCourse = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    router.query.id && dispatch(fetchCourse(router.query.id));
+    router.query.id && dispatch(fetchCourse({ id: router.query.id }));
   }, [dispatch, router.query.id]);
 
   return <ManageCourse />;

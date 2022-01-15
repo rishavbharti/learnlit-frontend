@@ -71,7 +71,7 @@ export const createCourse = createAsyncThunk(
   'courses/createCourse',
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API}/course`, { ...data });
+      const response = await axios.post(`${API}/create-course`, { ...data });
       return response.data;
     } catch (error) {
       if (!error.response) {
@@ -101,9 +101,9 @@ export const updateCourse = createAsyncThunk(
 
 export const fetchCourse = createAsyncThunk(
   'courses/fetchCourse',
-  async (id, { rejectWithValue }) => {
+  async (payload, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API}/course/${id}`);
+      const response = await axios.post(`${API}/get-course`, { ...payload });
       return response.data;
     } catch (error) {
       if (!error.response) {

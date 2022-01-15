@@ -1,173 +1,145 @@
-import React, { useState, useContext } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { styled } from '@mui/material/styles';
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import MuiAccordion from '@mui/material/Accordion';
+import MuiAccordionSummary from '@mui/material/AccordionSummary';
+import MuiAccordionDetails from '@mui/material/AccordionDetails';
 
-import { withStyles } from '@material-ui/core/styles';
-import MuiAccordion from '@material-ui/core/Accordion';
-import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
-import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ChapterItem from '../ChapterItem';
+import { getChapterDuration } from 'src/utils';
 
-import { ThemeContext } from 'themes';
+const Accordion = styled((props) => (
+  <MuiAccordion disableGutters elevation={0} square {...props} />
+))({
+  // border: `1px solid ${theme.palette.divider}`,
+  '&:not(:last-child)': {
+    borderBottom: 0,
+  },
+  '&:before': {
+    display: 'none',
+  },
+});
 
-import { scrollElementIntoView } from 'src/lib/utilities';
+const AccordionSummary = styled((props) => (
+  <MuiAccordionSummary
+    expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+    {...props}
+  />
+))(({ theme }) => ({
+  backgroundColor:
+    theme.palette.mode === 'dark'
+      ? 'rgba(255, 255, 255, .05)'
+      : 'rgba(0, 0, 0, .03)',
+  flexDirection: 'row-reverse',
+  '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+    transform: 'rotate(90deg)',
+  },
+  '& .MuiAccordionSummary-content': {
+    marginLeft: theme.spacing(1),
+  },
+}));
 
-import Shimmer from 'src/components/Shimmer';
-import CurriculumItem from '../CurriculumItem';
+const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+  padding: theme.spacing(1.3),
+  borderTop: '1px solid rgba(0, 0, 0, .125)',
+}));
 
-export default function CurriculumAccordion({
-  activeContent,
-  moduleIds,
-  moduleLectureMap,
-  setActiveContent,
-  viewOnly,
-  fetchSelectedLectures,
-}) {
-  const { theme } = useContext(ThemeContext);
+export default function CurriculumAccordion(props) {
+  const { viewOnly } = props;
+  const dispatch = useDispatch();
+  const [expanded, setExpanded] = useState([]);
 
-  const Accordion = withStyles({
-    root: {
-      border: `1px solid ${theme.border}`,
-      boxShadow: 'none',
-      '&:not(:last-child)': {
-        borderBottom: 0,
-      },
-      '&:before': {
-        display: 'none',
-      },
-      '&$expanded': {
-        margin: 0,
-      },
-    },
-    expanded: {},
-  })(MuiAccordion);
-
-  const AccordionSummary = withStyles({
-    root: {
-      backgroundColor: theme.headerBg,
-      borderBottom: `1px solid ${theme.border}`,
-      marginBottom: -1,
-      padding: 0,
-      minHeight: 56,
-      '&$expanded': {
-        minHeight: 56,
-      },
-    },
-    content: {
-      '&$expanded': {
-        margin: '12px 0',
-      },
-    },
-    expandIcon: {
-      order: -1,
-    },
-    expanded: {},
-  })(MuiAccordionSummary);
-
-  const AccordionDetails = withStyles({
-    root: {
-      padding: '1.2rem 2.2rem',
-      width: '100%',
-    },
-  })(MuiAccordionDetails);
-
-  const { contentTypesByIds, extraDataByIds } = useSelector(
-    (state) => state.contentTypes
+  const { data, currChapterIndex } = useSelector(
+    (state) => state.courses.course
   );
-  const [expanded, setExpanded] = useState([activeContent.moduleId]);
 
-  const renderLectures = (moduleId) => {
-    return moduleLectureMap[moduleId].map((lectureId) => {
-      const isLecturePresent =
-        extraDataByIds?.[lectureId] && !extraDataByIds[lectureId].loading;
+  useEffect(() => {
+    setExpanded([...expanded, currChapterIndex]);
+  }, [currChapterIndex]);
 
+  const renderLectures = (lectures, chapterIndex) => {
+    return lectures.map((lecture, index) => {
       const handleClick = (event) => {
-        if (!viewOnly && isLecturePresent) {
-          event.preventDefault();
-          event.stopPropagation();
-          setActiveContent(moduleId, lectureId);
+        if (!viewOnly) return null;
 
-          scrollElementIntoView(lectureId);
-        }
+        event.stopPropagation();
+
+        // scrollElementIntoView(index);
       };
 
       return (
         <AccordionDetails
-          className={classnames({
-            'group cursor-pointer hover:bg-accordionBg':
-              !viewOnly && isLecturePresent,
-          })}
-          id={lectureId}
+          className={classnames({ 'cursor-pointer': !viewOnly })}
+          id={index}
           onClick={handleClick}
-          key={lectureId}
+          key={index}
         >
-          {!extraDataByIds?.[lectureId] || extraDataByIds[lectureId].loading ? (
-            <div className='flex justify-between w-full'>
-              <Shimmer containerClass='w-3/5' />
-              <Shimmer containerClass='w-1/6' />
-            </div>
-          ) : (
-            <CurriculumItem
-              title={contentTypesByIds[lectureId].title}
-              duration={contentTypesByIds[lectureId].actualmedia[0].duration}
-              active={!viewOnly && activeContent.lectureId === lectureId}
-            />
-          )}
+          <ChapterItem
+            lecture={lecture}
+            chapterIndex={chapterIndex}
+            lectureIndex={index}
+          />
         </AccordionDetails>
       );
     });
   };
 
-  const handleChange = (moduleId) => (event, newExpanded) => {
+  const handleChange = (index) => (event, newExpanded) => {
     if (newExpanded) {
-      setExpanded([...expanded, moduleId]);
-
-      fetchSelectedLectures(moduleId);
+      setExpanded([...expanded, index]);
     } else {
-      const updatedExpandedItems = expanded.filter((id) => id !== moduleId);
+      const updatedExpandedItems = expanded.filter((id) => id !== index);
       setExpanded(updatedExpandedItems);
     }
   };
 
-  const renderModule = (moduleId) => {
+  const renderChapter = (chapter, index) => {
+    const totalChapterItem = chapter.content.length;
+    const itemText = `lecture${totalChapterItem > 1 ? 's' : ''}`;
+
     return (
-      <Accordion
-        square
-        expanded={expanded.includes(moduleId)}
-        onChange={handleChange(moduleId)}
-        TransitionProps={{ unmountOnExit: true }}
-        key={moduleId}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon style={{ fontSize: 30 }} />}
+      <div className='border border-solid border-border'>
+        <Accordion
+          expanded={expanded.includes(index)}
+          onChange={handleChange(index)}
+          TransitionProps={{ unmountOnExit: true }}
+          key={index}
         >
-          <p className='text-body font-semibold ml-14'>
-            {contentTypesByIds[moduleId].title}
-          </p>
-        </AccordionSummary>
-        {renderLectures(moduleId)}
-      </Accordion>
+          <AccordionSummary>
+            <div className='flex gap-5 justify-between items-center w-full mr-5'>
+              <p className='text-body break-all font-semibold'>
+                {chapter.chapterTitle}
+              </p>
+              <div className='flex gap-2 items-center text-labelText text-sm'>
+                <p>
+                  {totalChapterItem} {itemText}
+                </p>
+                {chapter?.duration && (
+                  <p>&#8226; {getChapterDuration(chapter?.duration)}</p>
+                )}
+              </div>
+            </div>
+          </AccordionSummary>
+          {chapter?.content && renderLectures(chapter.content, index)}
+        </Accordion>
+      </div>
     );
   };
 
-  const renderAccordion = () => {
-    return moduleIds.map((moduleId) => {
-      return renderModule(moduleId);
-    });
-  };
+  const renderAccordion = () =>
+    data?.curriculum.map((chapter, index) => renderChapter(chapter, index));
 
-  return renderAccordion();
+  return <div>{renderAccordion()}</div>;
 }
 
 CurriculumAccordion.propTypes = {
   activeContent: PropTypes.shape({
-    moduleId: PropTypes.string,
+    chapterId: PropTypes.string,
     lectureId: PropTypes.string,
   }),
   setActiveContent: PropTypes.func,
   viewOnly: PropTypes.bool,
-  moduleIds: PropTypes.arrayOf(PropTypes.string).isRequired,
-  moduleLectureMap: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string))
-    .isRequired,
 };
