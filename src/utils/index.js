@@ -41,3 +41,13 @@ export const getChapterDuration = (duration) => {
 
   return null;
 };
+
+export const scrollElementIntoView = (id) => {
+  const element = document.getElementById(id);
+
+  if (element) {
+    element.scrollIntoView({
+      behavior: 'smooth',
+    });
+  }
+};

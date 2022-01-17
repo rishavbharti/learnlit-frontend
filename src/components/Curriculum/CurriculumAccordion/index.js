@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { styled } from '@mui/material/styles';
@@ -9,12 +9,11 @@ import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 
 import ChapterItem from '../ChapterItem';
-import { getChapterDuration } from 'src/utils';
+import { getChapterDuration, scrollElementIntoView } from 'src/utils';
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
 ))({
-  // border: `1px solid ${theme.palette.divider}`,
   '&:not(:last-child)': {
     borderBottom: 0,
   },
@@ -48,8 +47,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 }));
 
 export default function CurriculumAccordion(props) {
-  const { viewOnly } = props;
-  const dispatch = useDispatch();
+  const { viewOnly, handleItemClick, activeChapterItem } = props;
   const [expanded, setExpanded] = useState([]);
 
   const { data, currChapterIndex } = useSelector(
@@ -58,29 +56,29 @@ export default function CurriculumAccordion(props) {
 
   useEffect(() => {
     setExpanded([...expanded, currChapterIndex]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currChapterIndex]);
 
-  const renderLectures = (lectures, chapterIndex) => {
+  const renderLectures = (lectures) => {
     return lectures.map((lecture, index) => {
       const handleClick = (event) => {
-        if (!viewOnly) return null;
+        if (viewOnly) return null;
 
         event.stopPropagation();
-
-        // scrollElementIntoView(index);
+        handleItemClick(lecture);
+        scrollElementIntoView(lecture._id);
       };
 
       return (
         <AccordionDetails
           className={classnames({ 'cursor-pointer': !viewOnly })}
-          id={index}
+          id={lecture._id}
           onClick={handleClick}
           key={index}
         >
           <ChapterItem
             lecture={lecture}
-            chapterIndex={chapterIndex}
-            lectureIndex={index}
+            active={activeChapterItem?._id === lecture._id}
           />
         </AccordionDetails>
       );
@@ -109,7 +107,7 @@ export default function CurriculumAccordion(props) {
           key={index}
         >
           <AccordionSummary>
-            <div className='flex gap-5 justify-between items-center w-full mr-5'>
+            <div className='flex flex-col gap-1 w-full pl-2'>
               <p className='text-body break-all font-semibold'>
                 {chapter.chapterTitle}
               </p>

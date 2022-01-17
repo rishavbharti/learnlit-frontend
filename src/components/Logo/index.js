@@ -13,6 +13,10 @@ const Logo = (props) => {
       width: 150,
       height: 40,
     },
+    'header-md': {
+      width: 145,
+      height: 35,
+    },
     footer: {
       width: 180,
       height: 50,
