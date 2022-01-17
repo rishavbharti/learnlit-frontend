@@ -95,10 +95,10 @@ const IntendedLearners = () => {
             You must enter at least 4 learning objectives or outcomes that
             learners can expect to achieve after completing your course.
           </p>
-          <ul>
+          <div>
             {highlightFields.map((item, index) => {
               return (
-                <li key={item.id} className='flex items-center gap-2'>
+                <div key={item.id} className='flex items-center gap-2'>
                   <Controller
                     name={`details.highlights.${index}.points`}
                     control={control}
@@ -132,10 +132,10 @@ const IntendedLearners = () => {
                   >
                     <DeleteIcon />
                   </IconButton>
-                </li>
+                </div>
               );
             })}
-          </ul>
+          </div>
           <Button
             label='Add more to your response'
             className='text-md mt-5'
@@ -158,10 +158,10 @@ const IntendedLearners = () => {
             If there are no requirements, use this space as an opportunity to
             lower the barrier for beginners.
           </p>
-          <ul>
+          <div>
             {prerequisiteFields.map((item, index) => {
               return (
-                <li key={item.id} className='flex items-center gap-2'>
+                <div key={item.id} className='flex items-center gap-2'>
                   <Controller
                     name={`details.prerequisites.${index}.points`}
                     control={control}
@@ -195,10 +195,10 @@ const IntendedLearners = () => {
                   >
                     <DeleteIcon />
                   </IconButton>
-                </li>
+                </div>
               );
             })}
-          </ul>
+          </div>
           <Button
             label='Add more to your response'
             className='text-md mt-5'
@@ -218,10 +218,10 @@ const IntendedLearners = () => {
             <br />
             This will help you attract the right learners to your course.
           </p>
-          <ul>
+          <div>
             {targetAudienceFields.map((item, index) => {
               return (
-                <li key={item.id} className='flex items-center gap-2'>
+                <div key={item.id} className='flex items-center gap-2'>
                   <Controller
                     name={`details.targetAudience.${index}.points`}
                     control={control}
@@ -255,10 +255,10 @@ const IntendedLearners = () => {
                   >
                     <DeleteIcon />
                   </IconButton>
-                </li>
+                </div>
               );
             })}
-          </ul>
+          </div>
           <Button
             label='Add more to your response'
             className='text-md mt-5'

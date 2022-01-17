@@ -9,13 +9,15 @@ import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 
 import Button from 'src/components/Button';
 import Layout from 'src/components/Layout';
+import CurriculumAccordion from 'src/components/Curriculum/CurriculumAccordion';
+
 import Highlights from './components/Highlights';
+import Points from './components/Points';
+import Description from './components/Description';
+import Instructors from './components/Instructors';
 
 import { fetchCourse } from 'redux/slice/course';
 import { getCourseDuration } from 'src/utils';
-import CurriculumAccordion from 'src/components/Curriculum/CurriculumAccordion';
-import Points from './components/Points';
-import Description from './components/Description';
 
 const CourseLandingPage = () => {
   const router = useRouter();
@@ -28,15 +30,21 @@ const CourseLandingPage = () => {
   const { slug } = router.query;
 
   useEffect(() => {
-    slug && dispatch(fetchCourse({ slug }));
-  }, [dispatch, slug]);
+    if (slug && course?.slug !== slug) {
+      dispatch(fetchCourse({ slug }));
+    }
+  }, [dispatch, slug, course?.slug]);
+
+  const instructors = course?.instructors
+    .map((instructor) => instructor.name)
+    .join(', ');
 
   const courseCTAs = () => {
     return (
       <Button
         className='w-full py-3 font-bold'
         label='Go to Course'
-        onClick={() => {}}
+        onClick={() => router.push(`/course/${course.slug}/learn`)}
       />
     );
   };
@@ -69,9 +77,11 @@ const CourseLandingPage = () => {
               <h1 className='text-3xl font-medium'>{course?.title}</h1>
               <h1 className='text-lg'>{course?.subtitle}</h1>
             </div>
-            <div className='text-sm'>
-              {/* <p>Created by </p> */}
-              <p className='flex items-center gap-2'>
+            <div className='flex gap-3 text-sm divide-x divide-solid'>
+              <p>
+                Course Creator: <span className='font-bold'>{instructors}</span>
+              </p>
+              <p className='pl-3 flex items-center gap-2'>
                 <LanguageIcon fontSize='small' /> {course?.language}
               </p>
             </div>
@@ -141,6 +151,7 @@ const CourseLandingPage = () => {
             data={course?.targetAudience}
             title='Who this course is for:'
           />
+          <Instructors data={course?.instructors} />
         </div>
       </div>
     </Layout>
