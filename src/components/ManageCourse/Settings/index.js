@@ -30,7 +30,7 @@ const Settings = () => {
       details: {
         instructors: '',
         duration: '',
-        hidePlayerBranding: true,
+        // hidePlayerBranding: true,
         published: false,
       },
     },
@@ -40,7 +40,7 @@ const Settings = () => {
     setValue('details', {
       instructors: data?.instructors[0],
       duration: data?.duration,
-      hidePlayerBranding: data?.hidePlayerBranding,
+      // hidePlayerBranding: data?.hidePlayerBranding,
       published: data?.published,
     });
   }, [data, setValue]);
@@ -112,7 +112,7 @@ const Settings = () => {
           />
         )}
 
-        {renderField(
+        {/* {renderField(
           'Do you wish to hide branding on the embedded player?',
           <Controller
             name='details.hidePlayerBranding'
@@ -121,7 +121,7 @@ const Settings = () => {
               <Switch checked={field.value} onChange={field.onChange} />
             )}
           />
-        )}
+        )} */}
 
         {renderField(
           'Course status',
