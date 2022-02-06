@@ -35,7 +35,8 @@
     "react-hook-form": "^7.22.5",
     "react-player": "^2.9.0",
     "react-redux": "^7.2.6",
-    "string-strip-html": "^9.1.4"
+    "string-strip-html": "^9.1.4",
+    "swiper": "^8.0.3"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.0",

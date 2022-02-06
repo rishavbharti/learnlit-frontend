@@ -12,6 +12,11 @@ import { isBrowser } from 'src/utils';
 
 import 'styles/globals.css';
 
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+
 const theme = createTheme({
   palette: {
     type: 'light',
@@ -22,6 +27,8 @@ const theme = createTheme({
       main: '#8E24AA', // #FEA300
     },
     body: '#FFFFFF',
+    text: { main: '#000000' },
+    bodyBg: { main: '#FFFFFF' },
   },
 });
 

@@ -25,7 +25,7 @@ export default function Button(props) {
         props.className
       )}
     >
-      {label}
+      {(label && label) || props.children}
     </StyledButton>
   );
 }
@@ -35,6 +35,6 @@ Button.defaultProps = {
 };
 
 Button.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   variant: PropTypes.oneOf(['contained', 'outlined', 'transparent']),
 };
