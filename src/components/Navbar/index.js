@@ -13,6 +13,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 import Logo from '../Logo';
 import Searchbar from '../Searchbar';
@@ -141,16 +142,25 @@ export default function Navbar() {
     }
   };
 
-  const renderCart = () => {
+  const renderWishlistAndCart = () => {
     return (
-      <IconButton
-        size='large'
-        aria-label='shopping cart'
-        color='inherit'
-        className='mx-5'
-      >
-        <ShoppingCartOutlinedIcon />
-      </IconButton>
+      <div className='flex mx-5 gap-2'>
+        <Link href='/wishlist' passHref>
+          <IconButton size='large' aria-label='wishlist' color='inherit'>
+            <Badge badgeContent={profile?.wishlist.length} color='primary'>
+              <FavoriteBorderIcon />
+            </Badge>
+          </IconButton>
+        </Link>
+
+        <Link href='/cart' passHref>
+          <IconButton size='large' aria-label='shopping cart' color='inherit'>
+            <Badge badgeContent={profile?.cart.length} color='primary'>
+              <ShoppingCartOutlinedIcon />
+            </Badge>
+          </IconButton>
+        </Link>
+      </div>
     );
   };
 
@@ -182,7 +192,7 @@ export default function Navbar() {
           <Box sx={{ flexGrow: 1 }} />
           <div className='flex items-center'>
             {renderLinks()}
-            {renderCart()}
+            {renderWishlistAndCart()}
             {renderAuthCTAs()}
             {isAuthenticated && <ProfileMenu />}
           </div>

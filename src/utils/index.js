@@ -51,3 +51,9 @@ export const scrollElementIntoView = (id) => {
     });
   }
 };
+
+export const getInstructors = (course) =>
+  course?.instructors?.map((i) => i.name).join(', ');
+
+export const getCoursePrice = (course) =>
+  course?.pricing === 'Free' ? 'Free' : `${course.currency} ${course.price}`;

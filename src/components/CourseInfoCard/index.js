@@ -18,7 +18,7 @@ const CourseInfoCard = (props) => {
         <div className='text-base pb-3'>
           <h2>{course.title}</h2>
           <p className='text-labelText text-sm'>
-            {course?.instructors.map((i) => i.name).join(', ')}
+            {course?.instructors?.map((i) => i.name).join(', ')}
           </p>
           <p className='font-medium'>
             {course?.pricing === 'Free'

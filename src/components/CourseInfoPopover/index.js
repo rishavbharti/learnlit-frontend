@@ -1,5 +1,6 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
+import { useSelector, useDispatch } from 'react-redux';
 import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import DoneIcon from '@mui/icons-material/Done';
@@ -7,6 +8,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 import Button from 'src/components/Button';
+import { addToCart, addToWishlist, removeFromWishlist } from 'redux/slice/auth';
 
 const Info = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -25,20 +27,48 @@ const Info = styled(({ className, ...props }) => (
 
 const CourseInfoPopover = (props) => {
   const { children, course } = props;
-  const { isAuthenticated, profile } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const {
+    isAuthenticated,
+    profile,
+    addRemoveCart: { loading: addRemoveCartLoading },
+    addRemoveWishlist: { loading: addRemoveWishlistLoading },
+  } = useSelector((state) => state.auth);
+
+  const handleAddToCart = () => {
+    if (!isAuthenticated) return router.push('/login');
+    dispatch(addToCart(course._id));
+  };
+  const handleGotoCart = () => router.push('/cart');
+
+  const handleAddToWishlist = () => {
+    if (!isAuthenticated) return router.push('/login');
+    dispatch(addToWishlist(course._id));
+  };
+
+  const handleRemoveFromWishlist = () =>
+    dispatch(removeFromWishlist(course._id));
 
   const purchaseCTA = () => {
     if (!isAuthenticated || !profile?.cart.includes(course._id)) {
       return (
-        <Button label='Add to cart' className='w-full py-3 font-semibold' />
+        <Button
+          label='Add to cart'
+          className='w-full py-3 font-semibold'
+          loading={addRemoveCartLoading}
+          onClick={handleAddToCart}
+        />
       );
     }
 
     if (profile?.cart.includes(course._id)) {
       return (
         <Button
-          label='Remove from cart'
+          label='Go to cart'
           className='w-full py-3 font-semibold'
+          loading={addRemoveCartLoading}
+          onClick={handleGotoCart}
         />
       );
     }
@@ -55,7 +85,11 @@ const CourseInfoPopover = (props) => {
   const wishlistCTA = () => {
     if (!isAuthenticated || !profile?.wishlist.includes(course._id)) {
       return (
-        <Button variant='outlined'>
+        <Button
+          variant='outlined'
+          onClick={handleAddToWishlist}
+          loading={addRemoveWishlistLoading}
+        >
           <FavoriteBorderIcon />
         </Button>
       );
@@ -63,7 +97,11 @@ const CourseInfoPopover = (props) => {
 
     if (profile?.wishlist.includes(course._id)) {
       return (
-        <Button variant='outlined'>
+        <Button
+          variant='outlined'
+          onClick={handleRemoveFromWishlist}
+          loading={addRemoveWishlistLoading}
+        >
           <FavoriteIcon />
         </Button>
       );

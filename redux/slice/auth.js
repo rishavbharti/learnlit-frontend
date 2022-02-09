@@ -8,6 +8,11 @@ const initialState = {
   error: false,
   success: false,
   verifyToken: { loading: false, error: false, success: false },
+  getCart: { loading: false, error: false, success: false },
+  checkout: { loading: false, error: false, success: false },
+  addRemoveCart: { loading: false, error: false, success: false },
+  getWishlist: { loading: false, error: false, success: false },
+  addRemoveWishlist: { loading: false, error: false, success: false },
   isAuthenticated: false,
   errorMessage: '',
   profile: null,
@@ -74,6 +79,96 @@ export const verifyToken = createAsyncThunk(
     try {
       const response = await axios.get(`${API}/user/current-user`);
       return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.statusText);
+    }
+  }
+);
+
+export const getCart = createAsyncThunk(
+  'auth/getCart',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API}/user/cart`);
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.statusText);
+    }
+  }
+);
+
+export const addToCart = createAsyncThunk(
+  'auth/addToCart',
+  async (_id, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${API}/user/cart`, { id: _id });
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.statusText);
+    }
+  }
+);
+
+export const removeFromCart = createAsyncThunk(
+  'auth/removeFromCart',
+  async (_id, { rejectWithValue }) => {
+    try {
+      await axios.delete(`${API}/user/cart/${_id}`);
+      return _id;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.statusText);
+    }
+  }
+);
+
+export const getWishlist = createAsyncThunk(
+  'auth/getWishlist',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API}/user/wishlist`);
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.statusText);
+    }
+  }
+);
+
+export const addToWishlist = createAsyncThunk(
+  'auth/addToWishlist',
+  async (_id, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${API}/user/wishlist`, { id: _id });
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.statusText);
+    }
+  }
+);
+
+export const removeFromWishlist = createAsyncThunk(
+  'auth/removeFromWishlist',
+  async (_id, { rejectWithValue }) => {
+    try {
+      await axios.delete(`${API}/user/wishlist/${_id}`);
+      return _id;
     } catch (error) {
       if (!error.response) {
         throw error;
@@ -152,6 +247,104 @@ export const authSlice = createSlice({
         state.verifyToken.error = true;
         state.isAuthenticated = false;
         // state.errorMessage = action.payload;
+      })
+
+      .addCase(getCart.pending, (state) => {
+        state.getCart.loading = true;
+      })
+      .addCase(getCart.fulfilled, (state, action) => {
+        state.getCart.loading = false;
+        state.getCart.success = true;
+        state.getCart.error = false;
+        state.profile.cartCourses = action.payload;
+      })
+      .addCase(getCart.rejected, (state) => {
+        state.getCart.loading = false;
+        state.getCart.error = true;
+      })
+
+      .addCase(addToCart.pending, (state) => {
+        state.addRemoveCart.loading = true;
+      })
+      .addCase(addToCart.fulfilled, (state, action) => {
+        state.addRemoveCart.loading = false;
+        state.addRemoveCart.success = true;
+        state.addRemoveCart.error = false;
+        state.profile.cart = action.payload;
+      })
+      .addCase(addToCart.rejected, (state) => {
+        state.addRemoveCart.loading = false;
+        state.addRemoveCart.error = true;
+      })
+
+      .addCase(removeFromCart.pending, (state) => {
+        state.addRemoveCart.loading = true;
+      })
+      .addCase(removeFromCart.fulfilled, (state, action) => {
+        state.addRemoveCart.loading = false;
+        state.addRemoveCart.success = true;
+        state.addRemoveCart.error = false;
+
+        state.profile.cart = state.profile.cart.filter(
+          (c) => c !== action.payload
+        );
+
+        state.profile.cartCourses = state.profile.cartCourses.filter(
+          (c) => c._id !== action.payload
+        );
+      })
+      .addCase(removeFromCart.rejected, (state) => {
+        state.addRemoveCart.loading = false;
+        state.addRemoveCart.error = true;
+      })
+
+      .addCase(getWishlist.pending, (state) => {
+        state.getWishlist.loading = true;
+      })
+      .addCase(getWishlist.fulfilled, (state, action) => {
+        state.getWishlist.loading = false;
+        state.getWishlist.success = true;
+        state.getWishlist.error = false;
+        state.profile.wishlistCourses = action.payload;
+      })
+      .addCase(getWishlist.rejected, (state) => {
+        state.getWishlist.loading = false;
+        state.getWishlist.error = true;
+      })
+
+      .addCase(addToWishlist.pending, (state) => {
+        state.addRemoveWishlist.loading = true;
+      })
+      .addCase(addToWishlist.fulfilled, (state, action) => {
+        state.addRemoveWishlist.loading = false;
+        state.addRemoveWishlist.success = true;
+        state.addRemoveWishlist.error = false;
+        state.profile.wishlist = action.payload;
+      })
+      .addCase(addToWishlist.rejected, (state) => {
+        state.addRemoveWishlist.loading = false;
+        state.addRemoveWishlist.error = true;
+      })
+
+      .addCase(removeFromWishlist.pending, (state) => {
+        state.addRemoveWishlist.loading = true;
+      })
+      .addCase(removeFromWishlist.fulfilled, (state, action) => {
+        state.addRemoveWishlist.loading = false;
+        state.addRemoveWishlist.success = true;
+        state.addRemoveWishlist.error = false;
+
+        state.profile.wishlist = state.profile.wishlist.filter(
+          (c) => c !== action.payload
+        );
+
+        state.profile.wishlistCourses = state.profile.wishlistCourses.filter(
+          (c) => c._id !== action.payload
+        );
+      })
+      .addCase(removeFromWishlist.rejected, (state) => {
+        state.addRemoveWishlist.loading = false;
+        state.addRemoveWishlist.error = true;
       });
   },
 });

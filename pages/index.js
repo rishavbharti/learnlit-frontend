@@ -18,7 +18,9 @@ export default function Home() {
   );
 
   useEffect(() => {
-    dispatch(getAllCourses());
+    if (!loading) {
+      dispatch(getAllCourses());
+    }
   }, [dispatch]);
 
   return (
