@@ -7,7 +7,6 @@ import LanguageIcon from '@mui/icons-material/Language';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 
-import Button from 'src/components/Button';
 import Layout from 'src/components/Layout';
 import CurriculumAccordion from 'src/components/Curriculum/CurriculumAccordion';
 
@@ -17,7 +16,8 @@ import Description from './components/Description';
 import Instructors from './components/Instructors';
 
 import { fetchCourse } from 'redux/slice/course';
-import { getCourseDuration } from 'src/utils';
+import { getCourseDuration, getInstructors } from 'src/utils';
+import CourseCTA from 'src/components/CourseCTA';
 
 const CourseLandingPage = () => {
   const router = useRouter();
@@ -34,20 +34,6 @@ const CourseLandingPage = () => {
       dispatch(fetchCourse({ slug }));
     }
   }, [dispatch, slug, course?.slug]);
-
-  const instructors = course?.instructors
-    .map((instructor) => instructor.name)
-    .join(', ');
-
-  const courseCTAs = () => {
-    return (
-      <Button
-        className='w-full py-3 font-bold'
-        label='Go to Course'
-        onClick={() => router.push(`/course/${course.slug}/learn`)}
-      />
-    );
-  };
 
   const renderHeader = () => {
     return (
@@ -79,13 +65,16 @@ const CourseLandingPage = () => {
             </div>
             <div className='flex gap-3 text-sm divide-x divide-solid'>
               <p>
-                Course Creator: <span className='font-bold'>{instructors}</span>
+                Course Creator:{' '}
+                <span className='font-bold'>{getInstructors(course)}</span>
               </p>
               <p className='pl-3 flex items-center gap-2'>
                 <LanguageIcon fontSize='small' /> {course?.language}
               </p>
             </div>
-            <div className='mt-8 block lg:hidden'>{courseCTAs()}</div>
+            <div className='mt-8 block lg:hidden'>
+              <CourseCTA course={course} />
+            </div>
           </div>
           {renderSidebar()}
         </div>
@@ -106,7 +95,7 @@ const CourseLandingPage = () => {
           allowFullScreen
         ></iframe>
         <div className='py-8 px-6 bg-bodyBg shadow-md'>
-          {courseCTAs()}
+          <CourseCTA course={course} />
           <div>
             <p className='font-bold mt-8 mb-3'>This course includes:</p>
             <div className='flex flex-col gap-3 text-sm'>

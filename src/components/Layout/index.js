@@ -18,7 +18,7 @@ export default function Layout(props) {
   if (error) {
     return (
       <CenterAligned height='screen'>
-        <h3>Error fetching courses</h3>
+        <h3>Error fetching data. Please refresh the page.</h3>
       </CenterAligned>
     );
   }

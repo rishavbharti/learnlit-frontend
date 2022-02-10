@@ -338,7 +338,7 @@ export const authSlice = createSlice({
           (c) => c !== action.payload
         );
 
-        state.profile.wishlistCourses = state.profile.wishlistCourses.filter(
+        state.profile.wishlistCourses = state.profile?.wishlistCourses?.filter(
           (c) => c._id !== action.payload
         );
       })
