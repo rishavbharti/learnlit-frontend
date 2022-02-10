@@ -178,6 +178,21 @@ export const removeFromWishlist = createAsyncThunk(
   }
 );
 
+export const checkout = createAsyncThunk(
+  'auth/checkout',
+  async (ids, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${API}/checkout`, { ids });
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.statusText);
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -186,6 +201,9 @@ export const authSlice = createSlice({
       localStorage.removeItem('token');
       Object.assign(state, initialState);
       state.isAuthenticated = false;
+    },
+    resetCheckout(state) {
+      Object.assign(state.checkout, initialState.checkout);
     },
   },
   extraReducers: (builder) => {
@@ -289,7 +307,7 @@ export const authSlice = createSlice({
           (c) => c !== action.payload
         );
 
-        state.profile.cartCourses = state.profile.cartCourses.filter(
+        state.profile.cartCourses = state.profile?.cartCourses?.filter(
           (c) => c._id !== action.payload
         );
       })
@@ -345,10 +363,29 @@ export const authSlice = createSlice({
       .addCase(removeFromWishlist.rejected, (state) => {
         state.addRemoveWishlist.loading = false;
         state.addRemoveWishlist.error = true;
+      })
+
+      .addCase(checkout.pending, (state) => {
+        state.checkout.loading = true;
+      })
+      .addCase(checkout.fulfilled, (state, action) => {
+        const { cart, wishlist, enrolledCourses } = action.payload;
+        state.checkout.loading = false;
+        state.checkout.success = true;
+        state.checkout.error = false;
+
+        state.profile.wishlist = wishlist;
+        state.profile.cart = cart;
+        state.profile.cartCourses = [];
+        state.profile.enrolledCourses = enrolledCourses;
+      })
+      .addCase(checkout.rejected, (state) => {
+        state.checkout.loading = false;
+        state.checkout.error = true;
       });
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, resetCheckout } = authSlice.actions;
 
 export default authSlice.reducer;

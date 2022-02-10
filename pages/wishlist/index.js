@@ -10,7 +10,7 @@ import { getWishlist } from 'redux/slice/auth';
 import Wishlist from 'public/assets/wishlist.svg';
 import CourseInfoCard from 'src/components/CourseInfoCard';
 
-export default function Home() {
+export default function WishlistPage() {
   const dispatch = useDispatch();
 
   const {

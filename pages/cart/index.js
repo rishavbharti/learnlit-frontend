@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Layout from 'src/components/Layout';
@@ -7,17 +8,19 @@ import CartCard from 'src/components/CartCard';
 import Button from 'src/components/Button';
 import CenterAligned from 'src/components/CenterAligned';
 
-import { getCart } from 'redux/slice/auth';
+import { checkout, getCart, resetCheckout } from 'redux/slice/auth';
 
 import EmptyCart from 'public/assets/empty_cart.svg';
 
-export default function Home() {
+export default function Cart() {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const {
     isAuthenticated,
     profile,
     getCart: { loading, error },
+    checkout: { loading: checkoutLoading, success: checkoutSuccess },
   } = useSelector((state) => state.auth);
 
   useEffect(() => {
@@ -25,6 +28,16 @@ export default function Home() {
       dispatch(getCart());
     }
   }, [dispatch]);
+
+  useEffect(() => {
+    if (checkoutSuccess) {
+      router.push('/my-courses');
+    }
+
+    return () => dispatch(resetCheckout());
+  }, [checkoutSuccess]);
+
+  const handleCheckout = () => dispatch(checkout(profile.cart));
 
   const renderPurchaseValueAndCTA = () => {
     const cartValue = profile?.cartCourses.reduce(
@@ -40,7 +53,13 @@ export default function Home() {
             {!cartValue ? 'Free' : `₹ ${cartValue}`}
           </p>
         </div>
-        <Button className='py-3 w-full'>Checkout</Button>
+        <Button
+          className='py-3 w-full'
+          onClick={handleCheckout}
+          loading={checkoutLoading}
+        >
+          Checkout
+        </Button>
       </div>
     );
   };

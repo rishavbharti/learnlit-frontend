@@ -20,6 +20,7 @@ const CourseLearningPage = () => {
   const dispatch = useDispatch();
   const [showSidebar, setShowSidebar] = useState(true);
   const [chapterItem, setChapterItem] = useState();
+  const { isAuthenticated, profile } = useSelector((state) => state.auth);
   const {
     fetch: { loading, error, success },
     data: course,
@@ -28,10 +29,22 @@ const CourseLearningPage = () => {
   const { slug } = router.query;
 
   useEffect(() => {
-    if (slug && course?.slug !== slug) {
+    if (!slug) router.push('/');
+  }, []);
+
+  useEffect(() => {
+    if (isAuthenticated && slug && course?.slug !== slug) {
       dispatch(fetchCourse({ slug }));
+    } else if (!isAuthenticated && slug) {
+      router.push(`/course/${slug}`);
     }
-  }, [dispatch, slug, course?.slug]);
+  }, [dispatch, isAuthenticated, slug, course?.slug]);
+
+  useEffect(() => {
+    if (course?._id && !profile?.enrolledCourses.includes(course._id) && slug) {
+      router.push(`/course/${slug}`);
+    }
+  }, [dispatch, profile?.enrolledCourses, course?._id]);
 
   useEffect(() => {
     if (success && !chapterItem) {
