@@ -36,7 +36,10 @@ const CourseCTA = (props) => {
   const handleLearnClick = () => router.push(`/course/${course.slug}/learn`);
 
   const purchaseAndLearnCTA = () => {
-    if (isAuthenticated && profile?.enrolledCourses.includes(course._id)) {
+    if (
+      isAuthenticated &&
+      profile?.enrolledCourses.some((c) => c.course === course._id)
+    ) {
       return (
         <Button
           label='Go to course'
@@ -72,7 +75,7 @@ const CourseCTA = (props) => {
   };
 
   const wishlistCTA = () => {
-    if (profile?.enrolledCourses.includes(course._id)) {
+    if (profile?.enrolledCourses.some((c) => c.course === course._id)) {
       return null;
     }
 

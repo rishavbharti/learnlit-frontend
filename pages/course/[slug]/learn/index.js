@@ -41,7 +41,11 @@ const CourseLearningPage = () => {
   }, [dispatch, isAuthenticated, slug, course?.slug]);
 
   useEffect(() => {
-    if (course?._id && !profile?.enrolledCourses.includes(course._id) && slug) {
+    if (
+      course?._id &&
+      !profile?.enrolledCourses.some((c) => c.course === course._id) &&
+      slug
+    ) {
       router.push(`/course/${slug}`);
     }
   }, [dispatch, profile?.enrolledCourses, course?._id]);

@@ -13,6 +13,7 @@ const initialState = {
   addRemoveCart: { loading: false, error: false, success: false },
   getWishlist: { loading: false, error: false, success: false },
   addRemoveWishlist: { loading: false, error: false, success: false },
+  getEnrolledCourses: { loading: false, error: false, success: false },
   isAuthenticated: false,
   errorMessage: '',
   profile: null,
@@ -183,6 +184,21 @@ export const checkout = createAsyncThunk(
   async (ids, { rejectWithValue }) => {
     try {
       const response = await axios.post(`${API}/checkout`, { ids });
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.statusText);
+    }
+  }
+);
+
+export const getEnrolledCourses = createAsyncThunk(
+  'auth/getEnrolledCourses',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API}/user/enrolled-courses`);
       return response.data;
     } catch (error) {
       if (!error.response) {
@@ -382,6 +398,21 @@ export const authSlice = createSlice({
       .addCase(checkout.rejected, (state) => {
         state.checkout.loading = false;
         state.checkout.error = true;
+      })
+
+      .addCase(getEnrolledCourses.pending, (state) => {
+        state.getEnrolledCourses.loading = true;
+      })
+      .addCase(getEnrolledCourses.fulfilled, (state, action) => {
+        state.getEnrolledCourses.loading = false;
+        state.getEnrolledCourses.success = true;
+        state.getEnrolledCourses.error = false;
+
+        state.profile.enrolledCoursesData = action.payload;
+      })
+      .addCase(getEnrolledCourses.rejected, (state) => {
+        state.getEnrolledCourses.loading = false;
+        state.getEnrolledCourses.error = true;
       });
   },
 });
