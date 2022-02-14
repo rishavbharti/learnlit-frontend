@@ -8,7 +8,7 @@ const CourseCarousel = (props) => {
   const { data } = props;
 
   const renderSlides = () => {
-    return data.map((course, index) => (
+    return data?.map((course, index) => (
       <SwiperSlide key={index}>
         <CourseInfoCard course={course} />
       </SwiperSlide>
