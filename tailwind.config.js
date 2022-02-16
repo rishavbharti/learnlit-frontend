@@ -14,6 +14,7 @@ module.exports = {
       primaryLight: '#b6adfc',
       labelText: '#7C7C7D',
       border: '#e7e9ed',
+      shimmer: '#e2e8f0',
       ltBorder: '#d1d7dc',
       bodyBg: '#FFFFFF',
       formBg: '#f8f9fa',

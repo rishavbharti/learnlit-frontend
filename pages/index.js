@@ -1,34 +1,33 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Image from 'next/image';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import Layout from 'src/components/Layout';
 
-import { getAllCourses } from 'redux/slice/course';
-
-import CourseCarousel from 'src/components/CourseCarousel';
-
 import BannerImg from 'public/assets/banner.png';
+import SectionList from 'src/components/SectionList';
+
+import { interests } from 'src/data/interests';
 
 export default function Home() {
-  const dispatch = useDispatch();
+  const { isAuthenticated, profile } = useSelector((state) => state.auth);
 
-  const { loading, error, data } = useSelector(
-    (state) => state.courses.allcourses
-  );
-
-  useEffect(() => {
-    if (!loading) {
-      dispatch(getAllCourses());
+  const renderSections = () => {
+    if (!isAuthenticated) {
+      return interests.map((topic, i) => <SectionList title={topic} key={i} />);
     }
-  }, [dispatch]);
+
+    if (isAuthenticated && profile.interests.length) {
+      return profile.interests.map((topic, i) => (
+        <SectionList title={topic} key={i} />
+      ));
+    }
+  };
 
   return (
-    <Layout loading={loading} error={error}>
+    <Layout>
       <Image src={BannerImg} width={1340} height={460} alt='banner' />
-      <div className='px-10 xl:px-0 my-10'>
-        <CourseCarousel data={data} />
-      </div>
+      <div className='px-10 xl:px-0 my-10'>{renderSections()}</div>
     </Layout>
   );
 }

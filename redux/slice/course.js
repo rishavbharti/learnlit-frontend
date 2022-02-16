@@ -61,15 +61,19 @@ export const getAllCourses = createAsyncThunk(
 
 export const getCategoryCourses = createAsyncThunk(
   'courses/getCategoryCourses',
-  async ({ stateName, category, subCategory }, { rejectWithValue }) => {
+  async ({ query, stateName, category, subCategory }, { rejectWithValue }) => {
     try {
       let response;
-      if (category && !subCategory) {
-        response = await axios.get(`${API}/courses?category=${category}`);
-      } else if (category && subCategory) {
-        response = await axios.get(
-          `${API}/courses?category=${category}&subCategory=${subCategory}`
-        );
+      if (query) {
+        response = await axios.get(`${API}/courses?query=${query}`);
+      } else {
+        if (category && !subCategory) {
+          response = await axios.get(`${API}/courses?category=${category}`);
+        } else if (category && subCategory) {
+          response = await axios.get(
+            `${API}/courses?category=${category}&subCategory=${subCategory}`
+          );
+        }
       }
 
       return { stateName, data: response.data };
@@ -273,22 +277,28 @@ export const coursesSlice = createSlice({
       })
 
       .addCase(getCategoryCourses.pending, (state, action) => {
-        console.log(action);
-        state.categoryCourses.loading = true;
+        const { stateName } = action.meta.arg;
+        state.categoryCourses[stateName] = {};
+        state.categoryCourses[stateName].loading = true;
+        state.categoryCourses[stateName].error = false;
       })
       .addCase(getCategoryCourses.fulfilled, (state, action) => {
         const { stateName, data } = action.payload;
-        state.categoryCourses.loading = false;
-        state.categoryCourses.success = true;
-        state.categoryCourses.error = false;
-        state.categoryCourses.errorMessage = null;
 
-        state.categoryCourses.data[stateName] = data;
+        state.categoryCourses[stateName].loading = false;
+        state.categoryCourses[stateName].success = true;
+        state.categoryCourses[stateName].error = false;
+        state.categoryCourses[stateName] = {
+          ...state.categoryCourses[stateName],
+          ...data,
+        };
       })
       .addCase(getCategoryCourses.rejected, (state, action) => {
-        state.categoryCourses.loading = false;
-        state.categoryCourses.error = true;
-        state.categoryCourses.errorMessage = action.payload;
+        const { stateName } = action.meta.arg;
+
+        state.categoryCourses[stateName].loading = false;
+        state.categoryCourses[stateName].success = false;
+        state.categoryCourses[stateName].error = true;
       })
 
       .addCase(getPostedCourses.pending, (state) => {

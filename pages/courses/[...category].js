@@ -16,31 +16,33 @@ export default function Category() {
   const dispatch = useDispatch();
   const router = useRouter();
   const { category } = router.query;
-  console.log(category);
 
   const [stateName, setStateName] = useState();
 
-  const { loading, error, data } = useSelector(
-    (state) => state.courses.categoryCourses
-  );
+  const { categoryCourses } = useSelector((state) => state.courses);
 
   useEffect(() => {
-    setStateName(category?.[1] || category?.[0]);
+    const state = category?.[1] || category?.[0];
+    setStateName(state);
 
-    if (!loading && category && !data?.[stateName]) {
+    if (
+      state &&
+      !categoryCourses?.[state]?.loading &&
+      !categoryCourses?.[state]?.courses
+    ) {
       dispatch(
         getCategoryCourses({
-          stateName: category?.[1] || category?.[0],
-          category: category[0],
+          stateName: state,
+          category: category?.[0],
           subCategory: category?.[1],
         })
       );
     }
-  }, [dispatch, category, stateName]);
+  }, [dispatch, category, categoryCourses]);
 
   const renderContent = () => {
-    if (data?.[stateName]) {
-      if (!data?.[stateName]?.courses.length) {
+    if (categoryCourses?.[stateName]) {
+      if (!categoryCourses[stateName]?.courses?.length) {
         return (
           <CenterAligned>
             <Image src={NoCourses} width='250' height='250' alt='No courses' />
@@ -51,7 +53,7 @@ export default function Category() {
 
       return (
         <div className='flex gap-10'>
-          {data?.[stateName]?.courses.map((course, i) => (
+          {categoryCourses[stateName].courses.map((course, i) => (
             <div key={i} className='w-60'>
               <CourseInfoCard course={course} />
             </div>
@@ -62,10 +64,13 @@ export default function Category() {
   };
 
   return (
-    <Layout loading={loading} error={error}>
+    <Layout
+      loading={categoryCourses?.[stateName]?.loading}
+      error={categoryCourses?.[stateName]?.error}
+    >
       <div className='px-10 xl:px-0 my-10'>
         <p className='text-2xl font-semibold mb-5'>
-          {data?.[stateName] && data[stateName]?.title}
+          {categoryCourses?.[stateName] && categoryCourses[stateName]?.title}
         </p>
         {renderContent()}
       </div>
