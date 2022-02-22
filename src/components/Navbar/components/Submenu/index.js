@@ -16,7 +16,7 @@ const Submenu = () => {
     if (!loading && !categories.length) {
       dispatch(getCategories());
     }
-  }, [categories.length, loading, dispatch]);
+  }, [dispatch]);
 
   const renderMenus = (menu, allowHover) => {
     if (!menu) return null;

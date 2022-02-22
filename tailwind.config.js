@@ -17,6 +17,7 @@ module.exports = {
       shimmer: '#e2e8f0',
       ltBorder: '#d1d7dc',
       bodyBg: '#FFFFFF',
+      footerBg: '#000000',
       formBg: '#f8f9fa',
       tertiaryBg: '#f1f1fc',
       hoverBg: 'rgba(77, 79, 83, 0.4)',

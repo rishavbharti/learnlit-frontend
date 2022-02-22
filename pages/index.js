@@ -8,6 +8,7 @@ import BannerImg from 'public/assets/banner.png';
 import SectionList from 'src/components/SectionList';
 
 import { interests } from 'src/data/interests';
+import Footer from 'src/components/Footer';
 
 export default function Home() {
   const { isAuthenticated, profile } = useSelector((state) => state.auth);
@@ -25,9 +26,12 @@ export default function Home() {
   };
 
   return (
-    <Layout>
-      <Image src={BannerImg} width={1340} height={460} alt='banner' />
-      <div className='px-10 xl:px-0 my-10'>{renderSections()}</div>
-    </Layout>
+    <>
+      <Layout>
+        <Image src={BannerImg} width={1340} height={460} alt='banner' />
+        <div className='px-10 xl:px-0 my-10'>{renderSections()}</div>
+      </Layout>
+      <Footer />
+    </>
   );
 }
