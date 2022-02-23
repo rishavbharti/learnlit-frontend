@@ -19,6 +19,7 @@ import Instructors from './components/Instructors';
 import { fetchCourse } from 'redux/slice/course';
 import { getCourseDuration, getInstructors } from 'src/utils';
 import CourseCTA from 'src/components/CourseCTA';
+import Reviews from 'src/components/Reviews';
 
 const CourseLandingPage = () => {
   const router = useRouter();
@@ -126,6 +127,11 @@ const CourseLandingPage = () => {
             title='Who this course is for:'
           />
           <Instructors data={course?.instructors} />
+          <Reviews
+            url={`http://localhost:3000/course/${slug}`}
+            id={course?.id}
+            title={slug}
+          />
         </div>
       </div>
     </Layout>
