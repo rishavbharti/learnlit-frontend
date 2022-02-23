@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import { styled, alpha } from '@mui/material/styles';
 
 import InputBase from '@mui/material/InputBase';
@@ -39,16 +40,31 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
-    // [theme.breakpoints.up('md')]: {
-    //   width: '40ch',
-    // },
-    // [theme.breakpoints.up('lg')]: {
-    //   width: '55ch',
-    // },
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
+    },
+    [theme.breakpoints.up('lg')]: {
+      width: '30ch',
+    },
+    [theme.breakpoints.up('xl')]: {
+      width: '50ch',
+    },
   },
 }));
 
 const Searchbar = () => {
+  const router = useRouter();
+  const query = router.query;
+  const [searchText, setSearchText] = useState(query?.q || '');
+
+  const handleChange = ({ target: { value } }) => setSearchText(value);
+
+  const handleSubmit = (e) => {
+    if (e.keyCode === 13) {
+      router.push(`/courses/search?q=${searchText}`);
+    }
+  };
+
   return (
     <Search>
       <SearchIconWrapper>
@@ -57,6 +73,9 @@ const Searchbar = () => {
       <StyledInputBase
         placeholder='Search…'
         inputProps={{ 'aria-label': 'search' }}
+        value={searchText}
+        onChange={handleChange}
+        onKeyDown={handleSubmit}
       />
     </Search>
   );
