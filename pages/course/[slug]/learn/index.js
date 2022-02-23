@@ -111,12 +111,16 @@ const CourseLearningPage = () => {
               </IconButton>
             )}
           </div>
-          {/* <div className='m-16 md:m-40'>
-            {renderDetailsComponent(
-              !showSidebar,
-              'sm:w-2/3 lg:w-1/2 sm:mx-auto'
-            )}
-          </div> */}
+          <div
+            className={classnames('mx-5 md:mx-16 lg:mx-40 mt-5 md:mt-10', {
+              'lg:hidden': showSidebar,
+            })}
+          >
+            <CurriculumAccordion
+              handleItemClick={handleItemClick}
+              activeChapterItem={chapterItem}
+            />
+          </div>
         </div>
         {showSidebar && (
           <div className='hidden lg:block lg:w-1/4 lg:sticky lg:top-0'>
