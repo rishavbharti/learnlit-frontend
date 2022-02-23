@@ -9,6 +9,7 @@ import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 
 import Layout from 'src/components/Layout';
 import CurriculumAccordion from 'src/components/Curriculum/CurriculumAccordion';
+import VideoPlayer from 'src/components/VideoPlayer';
 
 import Highlights from './components/Highlights';
 import Points from './components/Points';
@@ -49,15 +50,7 @@ const CourseLandingPage = () => {
               {course?.subCategory}
             </p>
             <div className='block lg:hidden'>
-              <iframe
-                width='650'
-                height='350'
-                src='https://www.youtube-nocookie.com/embed/62H1PEasNc0'
-                title='YouTube video player'
-                frameBorder='0'
-                allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-                allowFullScreen
-              ></iframe>
+              <VideoPlayer url={course?.previewMedia} />
             </div>
             <div className='flex flex-col gap-2 my-5'>
               <h1 className='text-3xl font-medium'>{course?.title}</h1>
@@ -85,15 +78,7 @@ const CourseLandingPage = () => {
   const renderSidebar = () => {
     return (
       <div className='hidden lg:block w-96 text-mainText'>
-        <iframe
-          width='385'
-          height='215'
-          src='https://www.youtube-nocookie.com/embed/62H1PEasNc0'
-          title='YouTube video player'
-          frameBorder='0'
-          allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-          allowFullScreen
-        ></iframe>
+        <VideoPlayer url={course?.previewMedia} />
         <div className='py-8 px-6 bg-bodyBg shadow-md'>
           <CourseCTA course={course} />
           <div>
