@@ -13,7 +13,7 @@ import { languages } from 'src/data/languages';
 import FormPageLayout from 'src/components/FormPageLayout';
 import { updateCourse } from 'redux/slice/course';
 
-const CourseDetails = () => {
+const CourseDetails = ({ setIsPristine }) => {
   const dispatch = useDispatch();
   const {
     data,
@@ -23,7 +23,12 @@ const CourseDetails = () => {
   const [category, setCategory] = useState('');
   const [subCategoriesList, setSubCategoriesList] = useState([]);
 
-  const { control, handleSubmit, setValue } = useForm({
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { isDirty },
+  } = useForm({
     defaultValues: {
       details: {
         title: '',
@@ -67,8 +72,13 @@ const CourseDetails = () => {
     setCategory(data?.category);
   }, [data, setValue]);
 
+  useEffect(() => {
+    setIsPristine(!isDirty);
+  }, [setIsPristine, isDirty]);
+
   const onSubmit = (formData) => {
     dispatch(updateCourse({ ...formData.details, _id: data._id }));
+    setIsPristine(true); // This should happen after the POST request is successful & should be changed in the future.
   };
 
   const renderForm = () => {

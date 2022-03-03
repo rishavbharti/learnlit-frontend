@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import Link from 'next/link';
@@ -20,6 +20,8 @@ import Settings from './Settings';
 
 const ManageCourse = () => {
   const router = useRouter();
+  const [isPristine, setIsPristine] = useState(true);
+
   const {
     fetch: { loading, error },
     data,
@@ -56,10 +58,26 @@ const ManageCourse = () => {
   ];
 
   const handleMenuClick = (query) => {
-    router.push({
-      pathname: `/instructor/courses/manage/${router.query.id}`,
-      query: { m: query },
-    });
+    if (!isPristine) {
+      const consent = confirm(
+        'You have unsaved changes. Do you really wish to continue without saving?'
+      );
+
+      if (consent) {
+        router.push({
+          pathname: `/instructor/courses/manage/${router.query.id}`,
+          query: { m: query },
+        });
+        setIsPristine(true);
+      } else {
+        return;
+      }
+    } else {
+      router.push({
+        pathname: `/instructor/courses/manage/${router.query.id}`,
+        query: { m: query },
+      });
+    }
   };
 
   const renderBody = () => {
@@ -81,17 +99,17 @@ const ManageCourse = () => {
 
     switch (activePath) {
       case 'd':
-        return <CourseDetails />;
+        return <CourseDetails setIsPristine={setIsPristine} />;
       case 'c':
         return <CreateCurriculum />;
       case 'l':
         return <IntendedLearners />;
       case 'p':
-        return <Pricing />;
+        return <Pricing setIsPristine={setIsPristine} />;
       case 's':
-        return <Settings />;
+        return <Settings setIsPristine={setIsPristine} />;
       default:
-        return <CourseDetails />;
+        return <CourseDetails setIsPristine={setIsPristine} />;
     }
   };
 

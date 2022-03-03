@@ -13,14 +13,20 @@ import FormPageLayout from 'src/components/FormPageLayout';
 
 import { updateCourse } from 'redux/slice/course';
 
-const Pricing = () => {
+const Pricing = ({ setIsPristine }) => {
   const dispatch = useDispatch();
   const {
     data,
     update: { loading },
   } = useSelector((state) => state.courses.course);
 
-  const { control, watch, handleSubmit, setValue } = useForm({
+  const {
+    control,
+    watch,
+    handleSubmit,
+    setValue,
+    formState: { isDirty },
+  } = useForm({
     defaultValues: {
       details: {
         pricing: 'Free',
@@ -40,6 +46,10 @@ const Pricing = () => {
     });
   }, [data, setValue]);
 
+  useEffect(() => {
+    setIsPristine(!isDirty);
+  }, [setIsPristine, isDirty]);
+
   const onSubmit = (formData) => {
     dispatch(
       updateCourse({
@@ -49,6 +59,7 @@ const Pricing = () => {
         _id: data._id,
       })
     );
+    setIsPristine(true); // This should happen after the POST request is successful & should be changed in the future.
   };
 
   const renderForm = () => {

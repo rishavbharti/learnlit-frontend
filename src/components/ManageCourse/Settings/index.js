@@ -11,7 +11,7 @@ import FormPageLayout from 'src/components/FormPageLayout';
 import { getAddedInstructors } from 'redux/slice/instructor';
 import { updateCourse } from 'redux/slice/course';
 
-const Settings = () => {
+const Settings = ({ setIsPristine }) => {
   const dispatch = useDispatch();
   const {
     data,
@@ -25,7 +25,12 @@ const Settings = () => {
     }
   }, [dispatch, instructors]);
 
-  const { control, handleSubmit, setValue } = useForm({
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { isDirty },
+  } = useForm({
     defaultValues: {
       details: {
         instructors: '',
@@ -45,6 +50,10 @@ const Settings = () => {
     });
   }, [data, setValue]);
 
+  useEffect(() => {
+    setIsPristine(!isDirty);
+  }, [setIsPristine, isDirty]);
+
   const onSubmit = (formData) => {
     dispatch(
       updateCourse({
@@ -53,6 +62,7 @@ const Settings = () => {
         _id: data._id,
       })
     );
+    setIsPristine(true); // This should happen after the POST request is successful & should be changed in the future.
   };
 
   const renderField = (label, Component) => {
