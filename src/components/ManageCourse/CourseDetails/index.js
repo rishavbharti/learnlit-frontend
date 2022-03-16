@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { stripHtml } from 'string-strip-html';
+// ! Causes build errors
+// import { stripHtml } from 'string-strip-html';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Input from 'src/components/Input';
@@ -142,16 +143,16 @@ const CourseDetails = ({ setIsPristine }) => {
           name='details.description'
           control={control}
           defaultValue=''
-          rules={{
-            validate: {
-              required: (v) =>
-                (v && stripHtml(v).result.length > 0) ||
-                'Description is required',
-              maxLength: (v) =>
-                (v && stripHtml(v).result.length <= 5000) ||
-                'Maximum character limit is 5000',
-            },
-          }}
+          // rules={{
+          //   validate: {
+          //     required: (v) =>
+          //       (v && stripHtml(v).result.length > 0) ||
+          //       'Description is required',
+          //     maxLength: (v) =>
+          //       (v && stripHtml(v).result.length <= 5000) ||
+          //       'Maximum character limit is 5000',
+          //   },
+          // }}
           render={({ field, fieldState: { error } }) => {
             return (
               <RichTextEditor
