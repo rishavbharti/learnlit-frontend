@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import Head from 'next/head';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 
@@ -61,6 +62,37 @@ function App({ Component, pageProps }) {
 
   return (
     <ThemeProvider theme={theme}>
+      <Head>
+        <title>Best online courses - Learn to succeed | learnlit</title>
+        <meta
+          name='description'
+          content='learnlit is an online learning and teaching marketplace with varied courses. Learn programming, software development, marketing, data science and more.'
+        />
+        <meta
+          name='title'
+          content='Best online courses - Learn to succeed | learnlit'
+        ></meta>
+        <link
+          rel='icon'
+          type='image/png'
+          sizes='32x32'
+          href='/favicon-32x32.png'
+        />
+        <link
+          rel='icon'
+          type='image/png'
+          sizes='16x16'
+          href='/favicon-16x16.png'
+        />
+        <link
+          rel='apple-touch-icon'
+          sizes='180x180'
+          href='/apple-touch-icon.png'
+        />
+        <link rel='manifest' href='/site.webmanifest' />
+        <link rel='mask-icon' href='/safari-pinned-tab.svg' color='#5bbad5' />
+        <meta name='theme-color' content='#ffffff' />
+      </Head>
       <Component {...pageProps} />
     </ThemeProvider>
   );

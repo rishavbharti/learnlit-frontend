@@ -129,7 +129,7 @@ export default function Navbar() {
       return (
         <div className='hidden md:flex gap-8'>
           {(profile?.role.includes('Instructor') || instructorProfile) && (
-            <Link href='/instructor'>
+            <Link href='/instructor/courses'>
               <a>Instructor</a>
             </Link>
           )}

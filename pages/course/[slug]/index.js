@@ -20,6 +20,7 @@ import { fetchCourse } from 'redux/slice/course';
 import { getCourseDuration, getInstructors } from 'src/utils';
 import CourseCTA from 'src/components/CourseCTA';
 import Reviews from 'src/components/Reviews';
+import Meta from 'src/components/Meta';
 
 const CourseLandingPage = () => {
   const router = useRouter();
@@ -114,27 +115,30 @@ const CourseLandingPage = () => {
   };
 
   return (
-    <Layout loading={loading || !course} error={error} containerClass='px-0'>
-      {renderHeader()}
-      <div className='flex justify-between py-10 w-11/12 xl:w-18/25 mx-auto'>
-        <div className='flex flex-col gap-14 w-11/12 md:w-3/4 lg:w-61/100 mx-auto lg:m-0'>
-          <Highlights highlights={course?.highlights} />
-          {renderCourseContent()}
-          <Points data={course?.prerequisites} title='Requirements' />
-          <Description description={course?.description} />
-          <Points
-            data={course?.targetAudience}
-            title='Who this course is for:'
-          />
-          <Instructors data={course?.instructors} />
-          <Reviews
-            url={`http://localhost:3000/course/${slug}`}
-            id={course?.id}
-            title={slug}
-          />
+    <>
+      <Meta title={course?.title} description={course?.subtitle} />
+      <Layout loading={loading || !course} error={error} containerClass='px-0'>
+        {renderHeader()}
+        <div className='flex justify-between py-10 w-11/12 xl:w-18/25 mx-auto'>
+          <div className='flex flex-col gap-14 w-11/12 md:w-3/4 lg:w-61/100 mx-auto lg:m-0'>
+            <Highlights highlights={course?.highlights} />
+            {renderCourseContent()}
+            <Points data={course?.prerequisites} title='Requirements' />
+            <Description description={course?.description} />
+            <Points
+              data={course?.targetAudience}
+              title='Who this course is for:'
+            />
+            <Instructors data={course?.instructors} />
+            <Reviews
+              url={`http://localhost:3000/course/${slug}`}
+              id={course?.id}
+              title={slug}
+            />
+          </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
+    </>
   );
 };
 
