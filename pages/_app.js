@@ -71,7 +71,11 @@ function App({ Component, pageProps }) {
         <meta
           name='title'
           content='Best online courses - Learn to succeed | learnlit'
-        ></meta>
+        />
+        <meta
+          name='google-site-verification'
+          content='6MxDJP4nF8VZNKks8J06ql0Z3qA9rThOIq9s9MU851A'
+        />
         <link
           rel='icon'
           type='image/png'
