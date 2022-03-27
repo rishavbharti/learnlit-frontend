@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import router from 'next/router';
 
 const API = process.env.NEXT_PUBLIC_API_ENDPOINT;
 
@@ -88,6 +89,8 @@ export const instructorSlice = createSlice({
         state.errorMessage = '';
 
         state.profile = action.payload;
+
+        router.push('/instructor/courses');
       })
       .addCase(becomeInstructor.rejected, (state, action) => {
         state.loading = false;
