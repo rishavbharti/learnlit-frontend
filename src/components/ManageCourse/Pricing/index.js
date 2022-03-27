@@ -85,6 +85,7 @@ const Pricing = ({ setIsPristine }) => {
                   value='Paid'
                   control={<Radio />}
                   label='Paid'
+                  disabled
                 />
               </RadioGroup>
             )}
