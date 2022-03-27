@@ -10,7 +10,7 @@ import withAuth from 'src/components/HOC/withAuth';
 import Button from 'src/components/Button';
 import InstructorPageLayout from 'src/components/InstructorPageLayout';
 import CenterAligned from 'src/components/CenterAligned';
-import InstructorTable from './component/InstructorTable';
+import InstructorTable from 'src/components/InstructorTable';
 
 import { getAddedInstructors } from 'redux/slice/instructor';
 

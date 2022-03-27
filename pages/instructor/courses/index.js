@@ -11,7 +11,7 @@ import Button from 'src/components/Button';
 import InstructorPageLayout from 'src/components/InstructorPageLayout';
 import CourseCard from 'src/components/CourseCard';
 import CenterAligned from 'src/components/CenterAligned';
-import CreateCourseDialog from './component/CreateCourseDialog';
+import CreateCourseDialog from 'src/components/CreateCourseDialog';
 
 import { openDialog } from 'redux/slice/dialog';
 import { getPostedCourses } from 'redux/slice/course';

@@ -11,10 +11,10 @@ import Layout from 'src/components/Layout';
 import CurriculumAccordion from 'src/components/Curriculum/CurriculumAccordion';
 import VideoPlayer from 'src/components/VideoPlayer';
 
-import Highlights from './components/Highlights';
-import Points from './components/Points';
-import Description from './components/Description';
-import Instructors from './components/Instructors';
+import Highlights from 'src/components/CourseLandingPageComps/Highlights';
+import Points from 'src/components/CourseLandingPageComps/Points';
+import Description from 'src/components/CourseLandingPageComps/Description';
+import Instructors from 'src/components/CourseLandingPageComps/Instructors';
 
 import { fetchCourse } from 'redux/slice/course';
 import { getCourseDuration, getInstructors } from 'src/utils';
