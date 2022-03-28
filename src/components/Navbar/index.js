@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -20,6 +21,7 @@ import Searchbar from '../Searchbar';
 import Submenu from './components/Submenu';
 import Button from '../Button';
 import ProfileMenu from './components/ProfileMenu';
+import MobileMenu from './components/MobileMenu';
 
 export default function Navbar() {
   const { isAuthenticated, profile } = useSelector((state) => state.auth);
@@ -184,6 +186,17 @@ export default function Navbar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position='static' color='body'>
         <Toolbar className='h-20 lg:px-24'>
+          {/* <IconButton
+            color='inherit'
+            aria-label='open drawer'
+            // onClick={handleDrawerOpen}
+            edge='start'
+            // sx={{ mr: 2, ...(open && { display: 'none' }) }}
+            className='md:hidden'
+          >
+            <MenuIcon />
+          </IconButton> */}
+          <MobileMenu />
           <Logo variant='header' />
           <div className='hidden md:flex w-1/2 items-center'>
             <Submenu />
