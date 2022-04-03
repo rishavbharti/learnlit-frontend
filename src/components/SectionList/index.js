@@ -4,7 +4,11 @@ import CourseCarousel from '../CourseCarousel';
 
 import { getCategoryCourses } from 'redux/slice/course';
 
-const SectionList = ({ title }) => {
+const SectionList = (props) => {
+  const {
+    interest: { type, title, slug },
+  } = props;
+
   const dispatch = useDispatch();
   const { categoryCourses } = useSelector((state) => state.courses);
 
@@ -17,7 +21,7 @@ const SectionList = ({ title }) => {
       dispatch(
         getCategoryCourses({
           stateName: title,
-          query: title,
+          [type]: [slug],
         })
       );
     }

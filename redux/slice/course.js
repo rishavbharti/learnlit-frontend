@@ -69,9 +69,15 @@ export const getCategoryCourses = createAsyncThunk(
       } else {
         if (category && !subCategory) {
           response = await axios.get(`${API}/courses?category=${category}`);
-        } else if (category && subCategory) {
+        }
+        if (category && subCategory) {
           response = await axios.get(
             `${API}/courses?category=${category}&subCategory=${subCategory}`
+          );
+        }
+        if (!category && subCategory) {
+          response = await axios.get(
+            `${API}/courses?subCategory=${subCategory}`
           );
         }
       }

@@ -15,12 +15,14 @@ export default function Home() {
 
   const renderSections = () => {
     if (!isAuthenticated) {
-      return interests.map((topic, i) => <SectionList title={topic} key={i} />);
+      return interests.map((interest, i) => (
+        <SectionList interest={interest} key={i} />
+      ));
     }
 
     if (isAuthenticated && profile.interests.length) {
-      return profile.interests.map((topic, i) => (
-        <SectionList title={topic} key={i} />
+      return profile.interests.map((interest, i) => (
+        <SectionList interest={interest} key={i} />
       ));
     }
   };
