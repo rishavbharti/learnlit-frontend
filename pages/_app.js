@@ -76,10 +76,10 @@ function App({ Component, pageProps }) {
           name='google-site-verification'
           content='U6O_I-6XFglFIh2T908LBYe2iWkSjbRmFsPtu6yOOWM'
         />
-        <meta
+        {/* <meta
           name='google-site-verification'
           content='6MxDJP4nF8VZNKks8J06ql0Z3qA9rThOIq9s9MU851A'
-        />
+        /> */}
         <link
           rel='icon'
           type='image/png'
