@@ -20,7 +20,7 @@ import Searchbar from '../Searchbar';
 import Submenu from './components/Submenu';
 import Button from '../Button';
 import ProfileMenu from './components/ProfileMenu';
-import MobileMenu from './components/MobileMenu';
+// import MobileMenu from './components/MobileMenu';
 
 export default function Navbar() {
   const { isAuthenticated, profile } = useSelector((state) => state.auth);
@@ -195,7 +195,7 @@ export default function Navbar() {
           >
             <MenuIcon />
           </IconButton> */}
-          <MobileMenu />
+          {/* <MobileMenu /> */}
           <Logo variant='header' />
           <div className='hidden md:flex w-1/2 items-center'>
             <Submenu />

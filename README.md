@@ -88,8 +88,6 @@ Any changes made to the app will reflect in the browser.
 learnlit consists of a module for instructors to create and manage courses, and manage profile of various other instructors part of their team.
 It also consists of pages for learners to preview, wishlist or add to cart courses, and pursue courses.
 
-The following diagram provides an overview of all the pages in this project.
-
   <br />
 
 ### Pages
@@ -118,7 +116,7 @@ This page also has a disqus thread embedded for discussions or reviews about the
 
 <br />
 
-- ### /course/[course-slug]/learn
+- **/course/[course-slug]/learn**
 
   This is the course learning page, accessible to only those enrolled in the course.
 
