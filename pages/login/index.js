@@ -112,6 +112,7 @@ function Login() {
               label='Use a guest account'
               type='submit'
               variant='transparent'
+              className='normal-case'
               loading={loading}
               onClick={handleGuestLogin}
             />
