@@ -28,6 +28,10 @@ function Login() {
     dispatch(login(data));
   };
 
+  const handleGuestLogin = () => {
+    onSubmit({ email: 'testuser@gmail.com', password: 'B39VVYBTzZknhW8' });
+  };
+
   const renderForm = () => {
     return (
       <div className='grid place-items-center h-screen'>
@@ -96,12 +100,22 @@ function Login() {
               loading={loading}
             />
           </form>
-          <p className='text-center mt-5'>
-            Don&apos;t have an account?{' '}
-            <Link href='/signup'>
-              <a className='text-primary'>Sign up</a>
-            </Link>
-          </p>
+          <div className='flex flex-col gap-0 text-center mt-5'>
+            <p className='text-center'>
+              Don&apos;t have an account?{' '}
+              <Link href='/signup'>
+                <a className='text-primary'>Sign up</a>
+              </Link>
+            </p>
+            <p>or</p>
+            <Button
+              label='Use a guest account'
+              type='submit'
+              variant='transparent'
+              loading={loading}
+              onClick={handleGuestLogin}
+            />
+          </div>
         </div>
       </div>
     );
