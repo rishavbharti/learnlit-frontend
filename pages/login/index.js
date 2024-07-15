@@ -29,7 +29,7 @@ function Login() {
   };
 
   const handleGuestLogin = () => {
-    onSubmit({ email: 'testuser@gmail.com', password: 'B39VVYBTzZknhW8' });
+    onSubmit({ email: 'test.user@gmail.com', password: 'test.user@gmail.com' });
   };
 
   const renderForm = () => {
